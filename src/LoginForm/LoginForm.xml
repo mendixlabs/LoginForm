@@ -1,0 +1,87 @@
+<widget id="LoginForm.widget.LoginForm" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
+  <name>LoginForm</name>
+  <description>Login form</description>
+  <icon>
+    iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+	bWFnZVJlYWR5ccllPAAAAkxJREFUeNp8Uktr1FAUPjfJTDpofNQOxhcUyoCIYm1HRbDtxqELEZ/V
+	qqtacOdfqH9BEayCsxFxUQdEF4ouFLuYTSlUO1N0bMFqkREtLbWZSSaP47nJDUmz8JBD7rnfOd95
+	XYaIwBiDhIydO3v+Rt9An84ILZfLv0ql0mMAvM2Y5IZOnkdHThCX9vbszNT0LCZldq6Gur73C7mo
+	PCFXPzZBUPxYnUfTQTw5cKqupNQHsqKOHz/Rv7RmWDj/7Sc5y09D5yTB9uHrI26DLg4c7F4iOxMj
+	lrty+2uGhzh68xYP2BcSSDGnru78MenD5BTMVWYekd2MYe7C18/jr1+9h8O9eW7nQkCJOWVqiynY
+	3LGVn01xp4q/xXW6gtCW0iFeHRNbOHN5EF5euHoU9nR2wsSTZ+vpFKwxKUhALo5lgVY4XdA2pSV4
+	ePcNPH8HV2wHJ/w+dmlQbFUVOuqIRpb+vaQ9pEeE8nMe0SIcCf+uYi4LRR7rZ/CoiNUqQlbbSRaN
+	5Y8D4IhR8Sfyg4+Rr5/Kp/U1P1XA9XxElEif1/AAfi9QPOON+V2+uJOGlg0wdLEVTMEL1DUcP2bD
+	ENEmu2EGGWVSjcHYfRtWDIShS4Q1SV1BYkdvJ9oCB20nILAD+9ogwLopCJuiHU/4YpIABRi+jGWA
+	Qj9xucHZxzFqY0MFvGtFFplCAgOg55DIWidNh4unINmfZTREHrNtC93ukIIAFpXoix4F8+xtfz2Q
+	mRtVUDfg7eg9eWR3h2xayGz4j9A7UpZX3cziijvJ7X8CDACOIxoVfZ9XXAAAAABJRU5ErkJggg==
+  </icon>
+  <properties>
+  	<property key="userexample" type="string" defaultValue="Username" required="false">
+      <caption>Username placeholder</caption>
+	  <category>Appearance</category>
+      <description>Text which is shown when username input value is empty</description>
+    </property>
+	<property key="passexample" type="string" defaultValue="Password" required="false">
+      <caption>Password placeholder</caption>
+	  <category>Appearance</category>
+      <description>Text which is shown when password input value is empty</description>
+    </property>
+	<property key="logintext" type="string" defaultValue="Login">
+      <caption>Login button caption</caption>
+	  <category>Appearance</category>
+      <description>Caption of login button</description>
+    </property>
+	<property key="progresstext" type="string" required="false">
+      <caption>Progress bar caption</caption>
+	  <category>Appearance</category>
+      <description>Caption of progress bar</description>
+    </property>
+	<!--<property key="checktext" type="string" required="false">
+      <caption>Automatically signin checkbox text</caption>
+	  <category>Appearance</category>
+      <description>Text to show next to the 'automatically signin' checkbox</description>
+    </property>-->
+	<property key="emptytext" type="string" required="false" defaultValue="No username or password given">
+      <caption>Emtpy username or password text</caption>
+	  <category>Appearance</category>
+      <description>Text to show when the form is submitted without username or password</description>
+    </property>
+	<property key="forgottext" type="string" required="false">
+      <caption>"Forgot password" link text</caption>
+	  <category>Appearance</category>
+      <description>Text to show for 'forgot password'</description>
+    </property>	
+  	<property key="showprogress" type="boolean" defaultValue="false">
+      <caption>Show progress bar while signing in</caption>
+	  <category>Behavior</category>
+      <description>Show progress bar while signing in</description>
+    </property>
+  <!--<property key="showcheck" type="boolean" defaultValue="false">
+      <caption>Show automatically signin checkbox</caption>
+    <category>Behavior</category>
+      <description>Show 'automatically signin' checkbox</description>
+    </property>-->
+  <!--<property key="saveUsername" type="boolean" defaultValue="false">
+      <caption>Save username</caption>
+    <category>Behavior</category>
+      <description>Save the username after the session is ended. The username of the logged on user will be stored in a cookie.</description>
+    </property>-->
+	<property key="showforgot" type="boolean" defaultValue="false">
+      <caption>Show "forgot password" link</caption>
+	  <category>Behavior</category>
+      <description>Show "forgot password" link</description>
+    </property>	
+	<property key="forgotmf" type="microflow" required="false">
+      <caption>Forgot password link microflow</caption>
+      <category>Behavior</category>
+      <description>Microflow to trigger if someone clicks 'forgot password' link</description>
+      <returnType type="Void"/>
+  	</property>	
+	<property key="dofocus" type="boolean" defaultValue="false">
+      <caption>Focus username input field</caption>
+	  <category>Behavior</category>
+      <description>Focus the username field when the form is showed (only use this if it is not done automatically)</description>
+    </property>
+  </properties>
+</widget>
+
