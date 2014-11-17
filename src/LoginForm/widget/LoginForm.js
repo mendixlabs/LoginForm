@@ -23,9 +23,10 @@
     require([
 
         'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
-        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text', 'dojo/dom-attr'
+        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text', 'dojo/dom-attr',
+        'dojo/_base/event'
 
-    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, declare, text, attr) {
+    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, declare, text, attr, event) {
 
         // Provide widget.
         dojo.provide('LoginForm.widget.LoginForm');
@@ -47,7 +48,7 @@
             i18nmap			: null,
 
             // Template path
-            templatePath: dojo.moduleUrl('LoginForm', 'widget/templates/LoginForm.html'),
+            templatePath: require.toUrl('LoginForm/widget/templates/LoginForm.html'),
 
             /**
              * Mendix Widget methods.
@@ -126,13 +127,13 @@
                 // Setup text input elements
                 this.submitButton.value = this.logintext;
 		
-                if(this.showforgot) {
+                if(this.forgotmf)
                     this.forgotLink.innerHTML = this.forgottext;
-                    this.connect(this.forgotLink, "click", "forgotPwd");
-                } else {
-                    mendix.dom.hide(this.forgotPane);
-                }
-		
+                else
+                    domStyle.set(this.forgotPane, "visibility", "hidden");
+                                    
+                domStyle.set(this.messageNode, "visibility", "hidden");
+                
                 this.getI18NMap();
 
                 if (this.showprogress) {
@@ -153,7 +154,63 @@
 
                 console.log('LoginForm - setup events');
 
-                this.connect(this.loginForm, "onsubmit", "_submitForm"); 
+                on(this.submitButton, "click", lang.hitch(this, function(e) {
+                    logger.debug(this.id + ".submitForm");
+
+                    var user = this._userInput.value;
+                    var pass = this._passInput.value;
+
+                    if(user && pass) {
+                        this.indicator && this.indicator.start();
+
+                        dojo.rawXhrPost({
+                            url			: 'xas/',
+                            mimetype	: "application/json",
+                            contentType	: "application/json",
+                            handleAs	: "json",
+                            postData	: dojo.toJson({
+                                action		: "login",
+                                params		: {
+                                    username	: user,
+                                    password	: pass,
+                                    locale		: ""
+                                }
+                            }),
+                            handle		: lang.hitch(this, "_validate")
+                        });
+                    } else {
+                        domStyle.set(this.messageNode, "visibility", "");
+                        this.messageNode.innerHTML = this.emptytext; 
+                    }
+
+                    event.stop(e);
+
+                    return false;
+
+                })); 
+                
+                if(this.forgotmf)
+                {
+                    on(this.forgotLink,"click", lang.hitch(this, function(e) {
+                        logger.debug(this.id + ".forgotPwd");
+
+                        var action = this.forgotmf;
+
+                        if(action) {
+                            mx.xas.action({
+                                actionname	: action,
+                                callback	: function() {
+                                    // ok	
+                                },
+                                error		: function() {
+                                    logger.error(this.id + ".forgotPwd: Error while calling microflow");
+                                }
+                            });
+                        }
+
+                        event.stop(e);
+                    }));  
+                }
 
             },
 
@@ -165,40 +222,6 @@
             _loadData: function () {
                 // TODO, get aditional data from mendix.
             },            
-
-            _submitForm: function(e) {
-                logger.debug(this.id + ".submitForm");
-
-                var user = this._userInput.value;
-                var pass = this._passInput.value;
-
-                if(user && pass) {
-                    this.indicator && this.indicator.start();
-
-                    dojo.rawXhrPost({
-                        url			: 'xas/',
-                        mimetype	: "application/json",
-                        contentType	: "application/json",
-                        handleAs	: "json",
-                        postData	: dojo.toJson({
-                            action		: "login",
-                            params		: {
-                                username	: user,
-                                password	: pass,
-                                locale		: ""
-                            }
-                        }),
-                        handle		: dojo.hitch(this, "_validate")
-                    });
-                } else {
-                    this.messageNode.innerHTML = this.emptytext; 
-                }
-
-                dojo.stopEvent(e);
-
-                return false;
-
-            },
             
             _validate : function(response, ioArgs) {
                 logger.debug(this.id + ".validate");
@@ -236,26 +259,7 @@
                         span.innerHTML = i18nmap.httpdefault;
                         break;
                 }
-            },
-
-            forgotPwd : function(e) {
-                logger.debug(this.id + ".forgotPwd");
-
-                var action = this.forgotmf;
-
-                if(action) {
-                    mx.xas.action({
-                        actionname	: action,
-                        callback	: function() {
-                            // ok	
-                        },
-                        error		: function() {
-                            logger.error(this.id + ".forgotPwd: Error while calling microflow");
-                        }
-                    });
-                }
-
-                dojo.stopEvent(e);
+                domStyle.set(this.messageNode, "visibility", "");
             },
 
             getI18NMap : function() {
@@ -275,7 +279,7 @@
             focusNode : function() {
                 logger.debug(this.id + ".focusNode");
 
-                setTimeout(dojo.hitch(this, function() {
+                setTimeout(lang.hitch(this, function() {
                     this.usernameInput.focus();
                 }), 0);
             }
