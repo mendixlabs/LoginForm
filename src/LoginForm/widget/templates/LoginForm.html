@@ -1,13 +1,16 @@
 <form  dojoAttachPoint="loginForm">
-    <div class="${baseClass}_messagePane">
-        <span class="${baseClass}_messageNode" dojoAttachPoint="messageNode">&nbsp;</span>
+    <div class="${baseClass}_messagePane alert alert-danger" dojoAttachPoint="messageNode">
+        <span class="${baseClass}_messageNode">&nbsp;</span>
     </div>
-    <div >
+
+    <div class="form-group">
         <input type="text" class="form-control username" dojoAttachPoint="usernameInput" />
-        <input type="password" class="form-control password" dojoAttachPoint="passwordInput" />
-        <input type="submit" class="btn btn-default submit" dojoAttachPoint="submitButton" />
-        <div class="forgotPwd" dojoAttachPoint="forgotPane">
-            <a class="forgotPwd" href="#" dojoAttachPoint="forgotLink"></a>
-        </div>
     </div>
+    <div class="form-group">
+        <input type="password" class="form-control password" dojoAttachPoint="passwordInput" />
+    </div>
+    <input type="submit" class="btn btn-default submit" dojoAttachPoint="submitButton" />
+    <span class="forgotPwd" dojoAttachPoint="forgotPane">
+        <a class="forgotPwd" href="#" dojoAttachPoint="forgotLink"></a>
+    </span>
 </form>
