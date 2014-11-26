@@ -1,3 +1,5 @@
+/*jslint white: true nomen: true plusplus: true */
+/*global mx, mxui, mendix, dojo, require, console, define, module, logger */
 /**
 
 	LoginForm
@@ -23,10 +25,10 @@
     require([
 
         'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
-        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text', 'dojo/dom-attr',
+        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text', 'dojo/dom-attr', 'dojo/request/xhr', 'dojo/_base/json',
         'dojo/_base/event'
 
-    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, declare, text, attr, event) {
+    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, declare, text, attr, xhr, dojoJSON, event) {
 
         // Provide widget.
         dojo.provide('LoginForm.widget.LoginForm');
@@ -41,11 +43,11 @@
             _handle: null,
 
             // Extra variables
-            _userInput 		: null,
-            _passInput 		: null,
+            _userInput : null,
+            _passInput : null,
 
-            indicator		: null,
-            i18nmap			: null,
+            _indicator : null,
+            _i18nmap : null,
 
             // Template path
             templatePath: require.toUrl('LoginForm/widget/templates/LoginForm.html'),
@@ -84,7 +86,9 @@
                 console.log('LoginForm - update');
 
                 // Execute callback.
-                callback && callback();
+                if (typeof callback !== 'undefined') {
+                    callback();
+                }
             },
 
             /**
@@ -121,26 +125,28 @@
                 this._userInput = this.usernameInput;
                 this._passInput = this.passwordInput;
                 
-                attr.set(this._userInput,"placeholder",this.userexample);
-                attr.set(this._passInput,"placeholder",this.passexample);
+                attr.set(this._userInput, 'placeholder', this.userexample);
+                attr.set(this._passInput, 'placeholder', this.passexample);
 
                 // Setup text input elements
                 this.submitButton.value = this.logintext;
 		
-                if(this.forgotmf)
+                if (this.forgotmf) {
                     this.forgotLink.innerHTML = this.forgottext;
-                else
-                    domStyle.set(this.forgotPane, "visibility", "hidden");
-                                    
-                domStyle.set(this.messageNode, "visibility", "hidden");
+                } else {
+                    domStyle.set(this.forgotPane, 'visibility', 'hidden');
+                }
+                domStyle.set(this.messageNode, 'visibility', 'hidden');
                 
-                this.getI18NMap();
+                this._getI18NMap();
 
                 if (this.showprogress) {
-                    this.indicator = mx.ui.getProgressIndicator("modal", this.progresstext);
+                    this._indicator = mx.ui.getProgressIndicator('modal', this.progresstext);
                 }		
 		
-                this.dofocus && this.focusNode();
+                if (typeof this.dofocus !== 'undefined' && this.dofocus) { 
+                    this._focusNode();
+                }
 
             },
 
@@ -154,21 +160,31 @@
 
                 console.log('LoginForm - setup events');
 
-                on(this.submitButton, "click", lang.hitch(this, function(e) {
-                    logger.debug(this.id + ".submitForm");
+                on(this.submitButton, 'click', lang.hitch(this, function(e) {
+                    
+                    var user = null,
+                        pass = null,
+                        promise = null;
+                    
+                    logger.debug(this.id + '.submitForm');
 
-                    var user = this._userInput.value;
-                    var pass = this._passInput.value;
+                    user = this._userInput.value;
+                    pass = this._passInput.value;
 
                     if(user && pass) {
-                        this.indicator && this.indicator.start();
+                        if (typeof this._indicator !== 'undefined' && this._indicator){
+                            this._indicator.start();
+                        }
 
                         dojo.rawXhrPost({
                             url			: 'xas/',
-                            mimetype	: "application/json",
-                            contentType	: "application/json",
-                            handleAs	: "json",
-                            postData	: dojo.toJson({
+                            mimetype	: 'application/json',
+                            contentType	: 'application/json',
+                            handleAs	: 'json',
+                            headers     : {
+                                'csrfToken' : mx.session.getCSRFToken()
+                            },
+                            postData	: dojoJSON.toJson({
                                 action		: "login",
                                 params		: {
                                     username	: user,
@@ -176,10 +192,11 @@
                                     locale		: ""
                                 }
                             }),
-                            handle		: lang.hitch(this, "_validate")
+                            handle		: lang.hitch(this, this._validate)
                         });
+                        
                     } else {
-                        domStyle.set(this.messageNode, "visibility", "");
+                        domStyle.set(this.messageNode, 'visibility', '');
                         this.messageNode.innerHTML = this.emptytext; 
                     }
 
@@ -191,19 +208,21 @@
                 
                 if(this.forgotmf)
                 {
-                    on(this.forgotLink,"click", lang.hitch(this, function(e) {
-                        logger.debug(this.id + ".forgotPwd");
+                    on(this.forgotLink, 'click', lang.hitch(this, function(e) {
+                        logger.debug(this.id + '.forgotPwd');
 
                         var action = this.forgotmf;
 
                         if(action) {
-                            mx.xas.action({
-                                actionname	: action,
+                            mx.data.action({
+                                params       : {
+                                    actionname : action
+                                },
                                 callback	: function() {
                                     // ok	
                                 },
                                 error		: function() {
-                                    logger.error(this.id + ".forgotPwd: Error while calling microflow");
+                                    logger.error(this.id + '.forgotPwd: Error while calling microflow');
                                 }
                             });
                         }
@@ -224,14 +243,17 @@
             },            
             
             _validate : function(response, ioArgs) {
-                logger.debug(this.id + ".validate");
+                var i18nmap = null,
+                    span = null;
+                
+                logger.debug(this.id + '.validate');
 
-                this.indicator && this.indicator.stop();
+                if (typeof this._indicator !== 'undefined' && this._indicator) {
+                    this._indicator.stop();
+                }
 
-                //dojo.cookie("EXTENDCOOKIE", this.checkboxInput.checked, { expires: 365 });
-
-                var i18nmap = this.i18nmap;
-                var span = this.messageNode;
+                i18nmap = this._i18nmap;
+                span = this.messageNode;
 
                 switch(ioArgs.xhr.status) {
                     case 200 :
@@ -259,31 +281,32 @@
                         span.innerHTML = i18nmap.httpdefault;
                         break;
                 }
-                domStyle.set(this.messageNode, "visibility", "");
+                domStyle.set(this.messageNode, 'visibility', '');
             },
 
-            getI18NMap : function() {
-                logger.debug(this.id + ".injectI18NMap");
+            _getI18NMap : function() {
+                logger.debug(this.id + '.injectI18NMap');
 
                 if (!window.i18n) {
                     dojo.xhrGet({
-                        url			: "js/login_i18n.js",
-                        handleAs	: "javascript",
+                        url			: 'js/login_i18n.js',
+                        handleAs	: 'javascript',
                         sync		: true
                     });
                 }
 
-                this.i18nmap = window.i18nMap;
+                this._i18nmap = window.i18nMap;
             },
 
-            focusNode : function() {
-                logger.debug(this.id + ".focusNode");
+            _focusNode : function() {
+                logger.debug(this.id + '.focusNode');
 
                 setTimeout(lang.hitch(this, function() {
                     this.usernameInput.focus();
                 }), 0);
             }
-        })
+            
+        });
     });
 
 }());

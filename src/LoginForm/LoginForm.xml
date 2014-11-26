@@ -56,6 +56,16 @@
 	  <category>Behavior</category>
       <description></description>
     </property>
+  <!--<property key="showcheck" type="boolean" defaultValue="false">
+      <caption>Show automatically signin checkbox</caption>
+    <category>Behavior</category>
+      <description>Show 'automatically signin' checkbox</description>
+    </property>-->
+  <!--<property key="saveUsername" type="boolean" defaultValue="false">
+      <caption>Save username</caption>
+    <category>Behavior</category>
+      <description>Save the username after the session is ended. The username of the logged on user will be stored in a cookie.</description>
+    </property>-->
     <property key="forgotmf" type="microflow" required="false">
       <caption>Forgot password microflow</caption>
       <category>Behavior</category>
