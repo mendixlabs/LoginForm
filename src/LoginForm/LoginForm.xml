@@ -36,11 +36,6 @@
 	  <category>Display</category>
       <description>Text to display in progress bar</description>
     </property>
-	<!--<property key="checktext" type="string" required="false">
-      <caption>Automatically signin checkbox text</caption>
-	  <category>Appearance</category>
-      <description>Text to show next to the 'automatically signin' checkbox</description>
-    </property>-->
 	<property key="emptytext" type="string" required="false" defaultValue="No username or password given">
       <caption>Emtpy username or password text</caption>
 	  <category>Display</category>
@@ -56,16 +51,6 @@
 	  <category>Behavior</category>
       <description></description>
     </property>
-  <!--<property key="showcheck" type="boolean" defaultValue="false">
-      <caption>Show automatically signin checkbox</caption>
-    <category>Behavior</category>
-      <description>Show 'automatically signin' checkbox</description>
-    </property>-->
-  <!--<property key="saveUsername" type="boolean" defaultValue="false">
-      <caption>Save username</caption>
-    <category>Behavior</category>
-      <description>Save the username after the session is ended. The username of the logged on user will be stored in a cookie.</description>
-    </property>-->
     <property key="forgotmf" type="microflow" required="false">
       <caption>Forgot password microflow</caption>
       <category>Behavior</category>
@@ -77,21 +62,6 @@
 	  <category>Behavior</category>
       <description>Focus the username field when the form is showed (only use this if it is not done automatically)</description>
     </property>
-  <!--<property key="showcheck" type="boolean" defaultValue="false">
-      <caption>Show automatically signin checkbox</caption>
-    <category>Behavior</category>
-      <description>Show 'automatically signin' checkbox</description>
-    </property>-->
-  <!--<property key="saveUsername" type="boolean" defaultValue="false">
-      <caption>Save username</caption>
-    <category>Behavior</category>
-      <description>Save the username after the session is ended. The username of the logged on user will be stored in a cookie.</description>
-    </property>-->
-	<!--<property key="showforgot" type="boolean" defaultValue="false">
-      <caption>Show "forgot password" link</caption>
-	  <category>Behavior</category>
-      <description>Show "forgot password" link</description>
-    </property>-->
   </properties>
 </widget>
 
