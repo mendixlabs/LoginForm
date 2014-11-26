@@ -18,23 +18,23 @@
   <properties>
   	<property key="userexample" type="string" defaultValue="Username" required="false">
       <caption>Username placeholder</caption>
-	  <category>Appearance</category>
-      <description>Text which is shown when username input value is empty</description>
+	  <category>Display</category>
+      <description>Input box sample value</description>
     </property>
 	<property key="passexample" type="string" defaultValue="Password" required="false">
       <caption>Password placeholder</caption>
-	  <category>Appearance</category>
-      <description>Text which is shown when password input value is empty</description>
+	  <category>Display</category>
+      <description>Input box sample value</description>
     </property>
 	<property key="logintext" type="string" defaultValue="Login">
       <caption>Login button caption</caption>
-	  <category>Appearance</category>
+	  <category>Display</category>
       <description>Caption of login button</description>
     </property>
 	<property key="progresstext" type="string" required="false">
       <caption>Progress bar caption</caption>
-	  <category>Appearance</category>
-      <description>Caption of progress bar</description>
+	  <category>Display</category>
+      <description>Text to display in progress bar</description>
     </property>
 	<!--<property key="checktext" type="string" required="false">
       <caption>Automatically signin checkbox text</caption>
@@ -43,18 +43,29 @@
     </property>-->
 	<property key="emptytext" type="string" required="false" defaultValue="No username or password given">
       <caption>Emtpy username or password text</caption>
-	  <category>Appearance</category>
-      <description>Text to show when the form is submitted without username or password</description>
+	  <category>Display</category>
+      <description>Text to display in case of form being submitted without username or password</description>
     </property>
-	<property key="forgottext" type="string" required="false">
+	<property key="forgottext" type="string" required="false" defaultValue="Forgotten password">
       <caption>"Forgot password" link text</caption>
-	  <category>Appearance</category>
-      <description>Text to show for 'forgot password'</description>
+	  <category>Display</category>
+      <description>Text to display in 'forgot password' link</description>
     </property>	
   	<property key="showprogress" type="boolean" defaultValue="false">
-      <caption>Show progress bar while signing in</caption>
+      <caption>Display progress bar while signing in</caption>
 	  <category>Behavior</category>
-      <description>Show progress bar while signing in</description>
+      <description></description>
+    </property>
+    <property key="forgotmf" type="microflow" required="false">
+      <caption>Forgot password microflow</caption>
+      <category>Behavior</category>
+      <description>Microflow being triggered in case of 'forgot password' onclick</description>
+      <returnType type="Void"/>
+  	</property>	
+	<property key="dofocus" type="boolean" defaultValue="false">
+      <caption>Focus username input field</caption>
+	  <category>Behavior</category>
+      <description>Focus the username field when the form is showed (only use this if it is not done automatically)</description>
     </property>
   <!--<property key="showcheck" type="boolean" defaultValue="false">
       <caption>Show automatically signin checkbox</caption>
@@ -66,22 +77,11 @@
     <category>Behavior</category>
       <description>Save the username after the session is ended. The username of the logged on user will be stored in a cookie.</description>
     </property>-->
-	<property key="showforgot" type="boolean" defaultValue="false">
+	<!--<property key="showforgot" type="boolean" defaultValue="false">
       <caption>Show "forgot password" link</caption>
 	  <category>Behavior</category>
       <description>Show "forgot password" link</description>
-    </property>	
-	<property key="forgotmf" type="microflow" required="false">
-      <caption>Forgot password link microflow</caption>
-      <category>Behavior</category>
-      <description>Microflow to trigger if someone clicks 'forgot password' link</description>
-      <returnType type="Void"/>
-  	</property>	
-	<property key="dofocus" type="boolean" defaultValue="false">
-      <caption>Focus username input field</caption>
-	  <category>Behavior</category>
-      <description>Focus the username field when the form is showed (only use this if it is not done automatically)</description>
-    </property>
+    </property>-->
   </properties>
 </widget>
 
