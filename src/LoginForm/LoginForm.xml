@@ -51,6 +51,11 @@
 	  <category>Behavior</category>
       <description></description>
     </property>
+  	<property key="showPasswordView" type="boolean" defaultValue="false">
+      <caption>View password</caption>
+	  <category>Behavior</category>
+      <description>Display view button on password to view the password.</description>
+    </property>
     <property key="forgotmf" type="microflow" required="false">
       <caption>Forgot password microflow</caption>
       <category>Behavior</category>
@@ -61,6 +66,16 @@
       <caption>Focus username input field</caption>
 	  <category>Behavior</category>
       <description>Focus the username field when the form is showed (only use this if it is not done automatically)</description>
+    </property>
+  	<property key="autoCorrect" type="boolean" defaultValue="false">
+      <caption>Auto correct</caption>
+	  <category>Mobile</category>
+      <description>Auto correct username field. (only applicable to mobile devices).</description>
+    </property>
+  	<property key="autoCapitalize" type="boolean" defaultValue="false">
+      <caption>Auto capitalize</caption>
+	  <category>Mobile</category>
+      <description>Auto capitalize username field. (only applicable to mobile devices).</description>
     </property>
   </properties>
 </widget>

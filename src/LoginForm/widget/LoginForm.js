@@ -120,14 +120,40 @@
              * ======================
              */
             _setupWidget: function () {
+                var templateWithView =      '<div class="input-group">' +
+                                            '    <input type="password" class="form-control password" id="' + this.id + '_password" />' +
+                                            '    <div class="input-group-addon" id="' + this.id + '_view">view</div>' +
+                                            '</div>',
+                    templateWithoutView =   '<input type="password" class="form-control password" id="' + this.id + '_password" />';
                 
                 //Setup controls
                 this._userInput = this.usernameInput;
-                this._passInput = this.passwordInput;
-                
                 attr.set(this._userInput, 'placeholder', this.userexample);
+                
+                if(this.showPasswordView === false){
+                    this.passwordContainer.innerHTML = templateWithoutView;
+                } else {
+                    this.passwordContainer.innerHTML = templateWithView;
+                    this.connect(dom.byId(this.id + '_view'), 'click', dojo.hitch(this, function(){
+                        if (attr.get(this._passInput, 'type') === 'password') {
+                            attr.set(this._passInput, 'type', 'text');
+                        } else {
+                            attr.set(this._passInput, 'type', 'password');
+                        }
+                    }));
+                }
+                this._passInput = dom.byId(this.id + '_password');
+                
                 attr.set(this._passInput, 'placeholder', this.passexample);
+                
+                if(this.autoCorrect){
+                    attr.set(this._userInput, 'autocorrect', 'on');
+                }
+                if(this.autoCapitalize){
+                    attr.set(this._userInput, 'autocapitalize', 'on');
+                }
 
+                
                 // Setup text input elements
                 this.submitButton.value = this.logintext;
 		
@@ -165,6 +191,10 @@
                     var user = null,
                         pass = null,
                         promise = null;
+                    
+                    if (attr.get(this._passInput, 'type') === 'text') {
+                        attr.set(this._passInput, 'type', 'password');
+                    }
                     
                     logger.debug(this.id + '.submitForm');
 
