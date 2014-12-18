@@ -45,6 +45,8 @@
             // Extra variables
             _userInput : null,
             _passInput : null,
+            _captionShow : null,
+            _captionHide : null,
 
             _indicator : null,
             _i18nmap : null,
@@ -120,9 +122,22 @@
              * ======================
              */
             _setupWidget: function () {
+                var templateWithView = null,
+                    templateWithoutView = null;
+                
+                if (this.showImage){
+                    this._captionShow = '<img src="' + this.showImage + '" id="' + this.id + '_image" />';
+                    this._captionHide = '<img src="' + this.hideImage + '" id="' + this.id + '_image" />';
+                }
+                    
+                if (this.useCaptionView){
+                    this._captionShow += '&nbsp;' + this.showButtonCaption;
+                    this._captionHide += '&nbsp;' + this.hideButtonCaption;
+                }
+                
                 var templateWithView =      '<div class="input-group">' +
                                             '    <input type="password" class="form-control password" id="' + this.id + '_password" />' +
-                                            '    <div class="input-group-addon" id="' + this.id + '_view">view</div>' +
+                                            '    <div class="input-group-addon" id="' + this.id + '_view">' + this._captionShow + '</div>' +
                                             '</div>',
                     templateWithoutView =   '<input type="password" class="form-control password" id="' + this.id + '_password" />';
                 
@@ -137,8 +152,10 @@
                     this.connect(dom.byId(this.id + '_view'), 'click', dojo.hitch(this, function(){
                         if (attr.get(this._passInput, 'type') === 'password') {
                             attr.set(this._passInput, 'type', 'text');
+                            dom.byId(this.id + '_view').innerHTML = this._captionHide;
                         } else {
                             attr.set(this._passInput, 'type', 'password');
+                            dom.byId(this.id + '_view').innerHTML = this._captionShow;
                         }
                     }));
                 }
@@ -194,6 +211,7 @@
                     
                     if (attr.get(this._passInput, 'type') === 'text') {
                         attr.set(this._passInput, 'type', 'password');
+                        dom.byId(this.id + '_view').innerHTML = this._captionShow;
                     }
                     
                     logger.debug(this.id + '.submitForm');

@@ -53,8 +53,33 @@
     </property>
   	<property key="showPasswordView" type="boolean" defaultValue="false">
       <caption>View password</caption>
-	  <category>Behavior</category>
+	  <category>Password</category>
       <description>Display view button on password to view the password.</description>
+    </property>
+  	<property key="useCaptionView" type="boolean" defaultValue="true">
+      <caption>Use caption</caption>
+	  <category>Password</category>
+      <description>Display the caption on the view button.</description>
+    </property>
+    <property key="showButtonCaption" type="string" required="true" defaultValue="view">
+        <caption>Show caption</caption>
+        <category>Password</category>
+        <description>The caption that is used for the show button for the value of the password.</description>
+    </property>
+    <property key="hideButtonCaption" type="string" required="true" defaultValue="hide">
+        <caption>Hide caption</caption>
+        <category>Password</category>
+        <description>The caption that is used for the hide button for the value of the password.</description>
+    </property>
+    <property key="showImage" type="image" required="false">
+        <caption>Show image for password</caption>
+        <category>Password</category>
+        <description>The image that is visible to show the password.</description>
+    </property>
+    <property key="hideImage" type="image" required="false">
+        <caption>Hide image for password</caption>
+        <category>Password</category>
+        <description>The image that is visible to hide the password to default characters.</description>
     </property>
     <property key="forgotmf" type="microflow" required="false">
       <caption>Forgot password microflow</caption>
