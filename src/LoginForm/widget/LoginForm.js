@@ -1,5 +1,4 @@
-/*jslint white: true nomen: true plusplus: true */
-/*global mx, mxui, mendix, dojo, require, console, define, module, logger */
+/*global mx, mxui, mendix, dojo, require, console, define, module, logger, window, setTimeout */
 /**
 
 	LoginForm
@@ -127,7 +126,13 @@
                 
                 if (this.showImage){
                     this._captionShow = '<img src="' + this.showImage + '" id="' + this.id + '_image" />';
+                } else {
+                    this._captionShow = '';
+                }
+                if (this.hideImage){
                     this._captionHide = '<img src="' + this.hideImage + '" id="' + this.id + '_image" />';
+                } else {
+                    this._captionHide = '';
                 }
                     
                 if (this.useCaptionView){
@@ -135,11 +140,11 @@
                     this._captionHide += '&nbsp;' + this.hideButtonCaption;
                 }
                 
-                var templateWithView =      '<div class="input-group">' +
+                templateWithView =      '<div class="input-group">' +
                                             '    <input type="password" class="form-control password" id="' + this.id + '_password" />' +
                                             '    <div class="input-group-addon" id="' + this.id + '_view">' + this._captionShow + '</div>' +
-                                            '</div>',
-                    templateWithoutView =   '<input type="password" class="form-control password" id="' + this.id + '_password" />';
+                                            '</div>';
+                templateWithoutView =   '<input type="password" class="form-control password" id="' + this.id + '_password" />';
                 
                 //Setup controls
                 this._userInput = this.usernameInput;
