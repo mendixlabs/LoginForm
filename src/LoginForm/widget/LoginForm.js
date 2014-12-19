@@ -24,10 +24,10 @@
     require([
 
         'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
-        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text', 'dojo/dom-attr', 'dojo/request/xhr', 'dojo/_base/json',
-        'dojo/_base/event'
+        'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-construct', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text', 'dojo/dom-attr', 'dojo/request/xhr', 'dojo/_base/json',
+        'dojo/_base/event', 'dojo/_base/window'
 
-    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domStyle, on, lang, declare, text, attr, xhr, dojoJSON, event) {
+    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domConstruct, domStyle, on, lang, declare, text, attr, xhr, dojoJSON, event,win) {
 
         // Provide widget.
         dojo.provide('LoginForm.widget.LoginForm');
@@ -191,9 +191,10 @@
                 if (this.forgotmf) {
                     this.forgotLink.innerHTML = this.forgottext;
                 } else {
-                    domStyle.set(this.forgotPane, 'visibility', 'hidden');
+                    domStyle.set(this.forgotPane, 'display', 'none');
                 }
-                domStyle.set(this.messageNode, 'visibility', 'hidden');
+                
+                domStyle.set(this.messageNode, 'display', 'none');
                 
                 this._getI18NMap();
 
@@ -258,7 +259,7 @@
                         });
                         
                     } else {
-                        domStyle.set(this.messageNode, 'visibility', '');
+                        domStyle.set(this.messageNode, 'display', 'block');
                         this.messageNode.innerHTML = this.emptytext; 
                     }
 
@@ -292,7 +293,6 @@
                         event.stop(e);
                     }));  
                 }
-
             },
 
 
@@ -306,7 +306,8 @@
             
             _validate : function(response, ioArgs) {
                 var i18nmap = null,
-                    span = null;
+                    span = null,
+                    message = ' ';
                 
                 logger.debug(this.id + '.validate');
 
@@ -315,8 +316,7 @@
                 }
 
                 i18nmap = this._i18nmap;
-                span = this.messageNode;
-
+                
                 switch(ioArgs.xhr.status) {
                     case 200 :
                         mendix.widget.hideTooltip();
@@ -324,26 +324,30 @@
                         break;
                     case 400 :
                     case 401 :
-                        span.innerHTML = i18nmap.http401;
+                        message += i18nmap.http401;
                         break;
                     case 402 :
                     case 403 :
-                        span.innerHTML = i18nmap.http401;
+                        message += i18nmap.http401;
                         break;
                     case 404 :
-                        span.innerHTML = i18nmap.http404;
+                        message += i18nmap.http404;
                         break;
                     case 500 :
-                        span.innerHTML = i18nmap.http500;
+                        message += i18nmap.http500;
                         break;
                     case 503 :
-                        span.innerHTML = i18nmap.http503;
+                        message += i18nmap.http503;
                         break;
                     default :
-                        span.innerHTML = i18nmap.httpdefault;
+                        message += i18nmap.httpdefault;
                         break;
                 }
-                domStyle.set(this.messageNode, 'visibility', '');
+                domConstruct.empty(this.messageNode);
+
+                this.messageNode.appendChild(win.doc.createTextNode(message));
+
+                domStyle.set(this.messageNode, 'display', 'block');
             },
 
             _getI18NMap : function() {

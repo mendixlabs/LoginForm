@@ -41,11 +41,11 @@
 	  <category>Display</category>
       <description>Text to display in case of form being submitted without username or password</description>
     </property>
-	<property key="forgottext" type="string" required="false" defaultValue="Forgotten password">
-      <caption>"Forgot password" link text</caption>
+	<property key="forgottext" type="string" required="false" defaultValue="Forgot your password?">
+      <caption>'Forgot password' link text</caption>
 	  <category>Display</category>
       <description>Text to display in 'forgot password' link</description>
-    </property>	
+    </property>
   	<property key="showprogress" type="boolean" defaultValue="false">
       <caption>Show progress bar</caption>
 	  <category>Behavior</category>
