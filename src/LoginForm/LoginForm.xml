@@ -27,7 +27,7 @@
       <description>Input box sample value</description>
     </property>
 	<property key="logintext" type="string" defaultValue="Login">
-      <caption>Login button caption</caption>
+      <caption>'Login' button caption</caption>
 	  <category>Display</category>
       <description>Caption of login button</description>
     </property>
@@ -47,39 +47,34 @@
       <description>Text to display in 'forgot password' link</description>
     </property>	
   	<property key="showprogress" type="boolean" defaultValue="false">
-      <caption>Display progress bar while signing in</caption>
+      <caption>Show progress bar</caption>
 	  <category>Behavior</category>
-      <description></description>
+      <description>Display a progress bar while signing in</description>
     </property>
   	<property key="showPasswordView" type="boolean" defaultValue="false">
-      <caption>View password</caption>
+      <caption>Show/mask password toggle</caption>
 	  <category>Password</category>
-      <description>Display view button on password to view the password.</description>
+      <description>Adds a toggle button to show/mask password.</description>
     </property>
-  	<property key="useCaptionView" type="boolean" defaultValue="true">
-      <caption>Use caption</caption>
-	  <category>Password</category>
-      <description>Display the caption on the view button.</description>
-    </property>
-    <property key="showButtonCaption" type="string" required="true" defaultValue="view">
-        <caption>Show caption</caption>
+    <property key="showButtonCaption" type="string" required="false" defaultValue="Show">
+        <caption>'Show password' button caption</caption>
         <category>Password</category>
         <description>The caption that is used for the show button for the value of the password.</description>
     </property>
-    <property key="hideButtonCaption" type="string" required="true" defaultValue="hide">
-        <caption>Hide caption</caption>
+    <property key="hideButtonCaption" type="string" required="false" defaultValue="Mask">
+        <caption>'Mask password' button caption</caption>
         <category>Password</category>
         <description>The caption that is used for the hide button for the value of the password.</description>
     </property>
     <property key="showImage" type="image" required="false">
-        <caption>Show image for password</caption>
+        <caption>'Show password' button image</caption>
         <category>Password</category>
-        <description>The image that is visible to show the password.</description>
+        <description>Optional image to be displayed in 'Show password' button.</description>
     </property>
     <property key="hideImage" type="image" required="false">
-        <caption>Hide image for password</caption>
+        <caption>'Mask password' button image</caption>
         <category>Password</category>
-        <description>The image that is visible to hide the password to default characters.</description>
+        <description>Optional image to be displayed in 'Mask password' button.</description>
     </property>
     <property key="forgotmf" type="microflow" required="false">
       <caption>Forgot password microflow</caption>
@@ -95,12 +90,12 @@
   	<property key="autoCorrect" type="boolean" defaultValue="false">
       <caption>Auto correct</caption>
 	  <category>Mobile</category>
-      <description>Auto correct username field. (only applicable to mobile devices).</description>
+      <description>Enables/disables auto correct functionality on username input field for mobile devices</description>
     </property>
   	<property key="autoCapitalize" type="boolean" defaultValue="false">
       <caption>Auto capitalize</caption>
 	  <category>Mobile</category>
-      <description>Auto capitalize username field. (only applicable to mobile devices).</description>
+      <description>Enables/disables auto capitalize functionality on username input field for mobile devices</description>
     </property>
   </properties>
 </widget>

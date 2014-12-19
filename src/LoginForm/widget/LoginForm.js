@@ -135,9 +135,18 @@
                     this._captionHide = '';
                 }
                     
-                if (this.useCaptionView){
-                    this._captionShow += '&nbsp;' + this.showButtonCaption;
-                    this._captionHide += '&nbsp;' + this.hideButtonCaption;
+                if (this.showButtonCaption != '') {
+                    if (this.showImage) {
+                        this._captionShow += '&nbsp;';
+                    }
+                    this._captionShow += this.showButtonCaption;
+                }
+                
+                if (this.hideButtonCaption != '') {
+                    if (this.hideImage) {
+                        this._captionHide += '&nbsp;';
+                    }
+                    this._captionHide += this.hideButtonCaption;
                 }
                 
                 templateWithView =      '<div class="input-group">' +
