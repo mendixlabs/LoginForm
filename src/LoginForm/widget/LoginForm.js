@@ -5,15 +5,15 @@
 	========================
 
 	@file      : LoginForm.js
-	@version   : 1.0
-	@author    : ...
+	@version   : 3.1
+	@author    : Richard Edens, Roeland Salij
 	@date      : 22-08-2014
 	@copyright : Mendix Technology BV
 	@license   : Apache License, Version 2.0, January 2004
 
 	Documentation
     ========================
-	Describe your widget here.
+	A custom login form which can be used as an alternative to the default Mendix login page.
 
 */
 
@@ -27,7 +27,7 @@
         'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-construct', 'dojo/dom-style', 'dojo/on', 'dojo/_base/lang', 'dojo/_base/declare', 'dojo/text', 'dojo/dom-attr', 'dojo/request/xhr', 'dojo/_base/json',
         'dojo/_base/event', 'dojo/_base/window'
 
-    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domConstruct, domStyle, on, lang, declare, text, attr, xhr, dojoJSON, event,win) {
+    ], function (_WidgetBase, _Widget, _Templated, domMx, dom, domQuery, domProp, domGeom, domClass, domConstruct, domStyle, on, lang, declare, text, attr, xhr, dojoJSON, event, win) {
 
         // Provide widget.
         dojo.provide('LoginForm.widget.LoginForm');
@@ -224,6 +224,8 @@
                         pass = null,
                         promise = null;
                     
+                    domStyle.set(this.messageNode, 'display', 'none');
+                    
                     if (attr.get(this._passInput, 'type') === 'text') {
                         attr.set(this._passInput, 'type', 'password');
                         dom.byId(this.id + '_view').innerHTML = this._captionShow;
@@ -240,7 +242,7 @@
                         }
 
                         dojo.rawXhrPost({
-                            url			: 'xas/',
+                            url			: mx.baseUrl,
                             mimetype	: 'application/json',
                             contentType	: 'application/json',
                             handleAs	: 'json',
@@ -343,10 +345,8 @@
                         message += i18nmap.httpdefault;
                         break;
                 }
-                domConstruct.empty(this.messageNode);
 
-                this.messageNode.appendChild(win.doc.createTextNode(message));
-
+                this.messageNode.innerHTML = message;
                 domStyle.set(this.messageNode, 'display', 'block');
             },
 
@@ -355,7 +355,7 @@
 
                 if (!window.i18n) {
                     dojo.xhrGet({
-                        url			: 'js/login_i18n.js',
+                        url			: mx.appUrl + 'js/login_i18n.js',
                         handleAs	: 'javascript',
                         sync		: true
                     });

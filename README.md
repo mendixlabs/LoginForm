@@ -42,7 +42,7 @@ For more information on contributing to this repository visit [Contributing to a
 * *'Mask password' button image* - Optional image to be displayed in 'Mask password' button
 
 ## Known issues
-- No feedback is given, by the runtime, whether the username exists or not. This is by design. 
+- Mendix runtime returns no feedback about the existence of a username. This is by design.
 
 
 
