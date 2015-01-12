@@ -61,9 +61,6 @@
             // DOJO.WidgetBase -> PostCreate is fired after the properties of the widget are set.
             postCreate: function () {
 
-                // postCreate
-                console.log('LoginForm - postCreate');
-
                 // Setup widgets
                 this._setupWidget();
 
@@ -74,8 +71,7 @@
 
             // DOJO.WidgetBase -> Startup is fired after the properties of the widget are set.
             startup: function () {
-                // postCreate
-                console.log('LoginForm - startup');
+                
             },
 
             /**
@@ -83,32 +79,11 @@
              */
 
             update: function (obj, callback) {
-                // startup
-                console.log('LoginForm - update');
-
+                
                 // Execute callback.
                 if (typeof callback !== 'undefined') {
                     callback();
                 }
-            },
-
-            /**
-             * How the widget re-acts from actions invoked by the Mendix App.
-             */
-            suspend: function () {
-                //TODO, what will happen if the widget is suspended (not visible).
-            },
-
-            resume: function () {
-                //TODO, what will happen if the widget is resumed (set visible).
-            },
-
-            enable: function () {
-                //TODO, what will happen if the widget is suspended (not visible).
-            },
-
-            disable: function () {
-                //TODO, what will happen if the widget is resumed (set visible).
             },
 
             unintialize: function () {
@@ -208,15 +183,9 @@
 
             },
 
-            // Create child nodes.
-            _createChildNodes: function () {
-                console.log('LoginForm - createChildNodes events');
-            },
 
             // Attach events to newly created nodes.
             _setupEvents: function () {
-
-                console.log('LoginForm - setup events');
 
                 on(this.submitButton, 'click', lang.hitch(this, function(e) {
                     
@@ -323,7 +292,7 @@
                     case 200 :
                         mendix.widget.hideTooltip();
                         mx.login();
-                        break;
+						return;
                     case 400 :
                     case 401 :
                         message += i18nmap.http401;
@@ -345,8 +314,8 @@
                         message += i18nmap.httpdefault;
                         break;
                 }
-
-                this.messageNode.innerHTML = message;
+				
+                this.messageNode.innerHTML = message; // is only reached when xhrstatus !== 200
                 domStyle.set(this.messageNode, 'display', 'block');
             },
 
