@@ -5,7 +5,7 @@
 	========================
 
 	@file      : LoginForm.js
-	@version   : 3.1
+	@version   : 3.1.1
 	@author    : Richard Edens, Roeland Salij
 	@date      : 22-08-2014
 	@copyright : Mendix Technology BV
