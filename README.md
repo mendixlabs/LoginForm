@@ -7,7 +7,7 @@ For more information on contributing to this repository visit [Contributing to a
 
 ## Features
 
-- Use this widget to login **local users** from any page in your Mendix application
+- Use this widget to enable **local users** to login from any page in your Mendix application
 - A link to open a 'Forgot my password' page
  
 ## Limitations
