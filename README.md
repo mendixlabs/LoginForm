@@ -11,7 +11,7 @@ For more information on contributing to this repository visit [Contributing to a
 - A link to open a 'Forgot my password' page
  
 ## Limitations
-- Input credentials are authenticated with user credentials available in System.User entity(local accounts). Logging in with Mendix SSO account credentials will not result in being logged in.
+- Input credentials are authenticated with user credentials available in System.User entity(local accounts). Logging in with Mendix SSO account credentials, using this widget, will not result in being logged in.
 - In a Sandbox environment an application owner is not able to configure the MxAdmin account(=local). To log in with a MxAdmin account is not possible in a Sandbox.
 
 ## Configuration 
