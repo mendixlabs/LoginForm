@@ -290,7 +290,6 @@
                 
                 switch(ioArgs.xhr.status) {
                     case 200 :
-                        mendix.widget.hideTooltip();
                         mx.login();
 						return;
                     case 400 :
