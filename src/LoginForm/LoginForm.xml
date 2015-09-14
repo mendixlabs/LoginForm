@@ -37,7 +37,7 @@
       <description>Text to display in progress bar</description>
     </property>
 	<property key="emptytext" type="string" required="false" defaultValue="No username or password given">
-      <caption>Emtpy username or password text</caption>
+      <caption>Empty username or password text</caption>
 	  <category>Display</category>
       <description>Text to display in case of form being submitted without username or password</description>
     </property>
