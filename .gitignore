@@ -2,8 +2,11 @@ test/javasource/
 test/deployment/
 test/.classpath
 test/.project
-*.mws
 *.launch
 *.tmp
 *.lock
 .idea/
+
+*DS_Store*
+node_modules/
+dist/
