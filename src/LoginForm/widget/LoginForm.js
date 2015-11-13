@@ -5,8 +5,8 @@
 	========================
 
 	@file      : LoginForm.js
-	@version   : 3.1.1
-	@author    : Richard Edens, Roeland Salij
+	@version   : 3.2.0
+	@author    : Richard Edens, Roeland Salij, J.W. Lagendijk
 	@date      : 22-08-2014
 	@copyright : Mendix Technology BV
 	@license   : Apache License, Version 2.0, January 2004
@@ -20,7 +20,6 @@
 (function() {
     'use strict';
 
-    // test
     require([
 
         'mxui/widget/_WidgetBase', 'dijit/_Widget', 'dijit/_TemplatedMixin',
@@ -71,7 +70,7 @@
 
             // DOJO.WidgetBase -> Startup is fired after the properties of the widget are set.
             startup: function () {
-                
+
             },
 
             /**
@@ -79,7 +78,7 @@
              */
 
             update: function (obj, callback) {
-                
+
                 // Execute callback.
                 if (typeof callback !== 'undefined') {
                     callback();
@@ -87,7 +86,7 @@
             },
 
             unintialize: function () {
-                
+
             },
 
 
@@ -98,7 +97,7 @@
             _setupWidget: function () {
                 var templateWithView = null,
                     templateWithoutView = null;
-                
+
                 if (this.showImage){
                     this._captionShow = '<img src="' + this.showImage + '" id="' + this.id + '_image" />';
                 } else {
@@ -109,31 +108,31 @@
                 } else {
                     this._captionHide = '';
                 }
-                    
+
                 if (this.showButtonCaption != '') {
                     if (this.showImage) {
                         this._captionShow += '&nbsp;';
                     }
                     this._captionShow += this.showButtonCaption;
                 }
-                
+
                 if (this.hideButtonCaption != '') {
                     if (this.hideImage) {
                         this._captionHide += '&nbsp;';
                     }
                     this._captionHide += this.hideButtonCaption;
                 }
-                
+
                 templateWithView =      '<div class="input-group">' +
                                             '    <input type="password" class="form-control password" id="' + this.id + '_password" />' +
                                             '    <div class="input-group-addon" id="' + this.id + '_view">' + this._captionShow + '</div>' +
                                             '</div>';
                 templateWithoutView =   '<input type="password" class="form-control password" id="' + this.id + '_password" />';
-                
+
                 //Setup controls
                 this._userInput = this.usernameInput;
                 attr.set(this._userInput, 'placeholder', this.userexample);
-                
+
                 if(this.showPasswordView === false){
                     this.passwordContainer.innerHTML = templateWithoutView;
                 } else {
@@ -149,9 +148,9 @@
                     }));
                 }
                 this._passInput = dom.byId(this.id + '_password');
-                
+
                 attr.set(this._passInput, 'placeholder', this.passexample);
-                
+
                 if(this.autoCorrect){
                     attr.set(this._userInput, 'autocorrect', 'on');
                 }
@@ -159,24 +158,24 @@
                     attr.set(this._userInput, 'autocapitalize', 'on');
                 }
 
-                
+
                 // Setup text input elements
                 this.submitButton.value = this.logintext;
-		
+
                 if (this.forgotmf) {
                     this.forgotLink.innerHTML = this.forgottext;
                 } else {
                     domStyle.set(this.forgotPane, 'display', 'none');
                 }
-                
+
                 domStyle.set(this.messageNode, 'display', 'none');
-                
+
                 this._getI18NMap();
 
                 if (this.showprogress) {
-                    this._indicator = mx.ui.getProgressIndicator('modal', this.progresstext);
-                }		
-		
+                    this._indicator = mx.ui.getProgress(this.progresstext);
+                }
+
                 if (typeof this.dofocus !== 'undefined' && this.dofocus) { 
                     this._focusNode();
                 }
@@ -188,18 +187,18 @@
             _setupEvents: function () {
 
                 on(this.submitButton, 'click', lang.hitch(this, function(e) {
-                    
+
                     var user = null,
                         pass = null,
                         promise = null;
-                    
+
                     domStyle.set(this.messageNode, 'display', 'none');
-                    
+
                     if (attr.get(this._passInput, 'type') === 'text') {
                         attr.set(this._passInput, 'type', 'password');
                         dom.byId(this.id + '_view').innerHTML = this._captionShow;
                     }
-                    
+
                     logger.debug(this.id + '.submitForm');
 
                     user = this._userInput.value;
@@ -228,7 +227,7 @@
                             }),
                             handle		: lang.hitch(this, this._validate)
                         });
-                        
+
                     } else {
                         domStyle.set(this.messageNode, 'display', 'block');
                         this.messageNode.innerHTML = this.emptytext; 
@@ -239,7 +238,7 @@
                     return false;
 
                 })); 
-                
+
                 if(this.forgotmf)
                 {
                     on(this.forgotLink, 'click', lang.hitch(this, function(e) {
@@ -274,12 +273,12 @@
             _loadData: function () {
                 // TODO, get aditional data from mendix.
             },            
-            
+
             _validate : function(response, ioArgs) {
                 var i18nmap = null,
                     span = null,
                     message = ' ';
-                
+
                 logger.debug(this.id + '.validate');
 
                 if (typeof this._indicator !== 'undefined' && this._indicator) {
@@ -287,11 +286,11 @@
                 }
 
                 i18nmap = this._i18nmap;
-                
+
                 switch(ioArgs.xhr.status) {
                     case 200 :
                         mx.login();
-						return;
+                        return;
                     case 400 :
                     case 401 :
                         message += i18nmap.http401;
@@ -313,7 +312,7 @@
                         message += i18nmap.httpdefault;
                         break;
                 }
-				
+
                 this.messageNode.innerHTML = message; // is only reached when xhrstatus !== 200
                 domStyle.set(this.messageNode, 'display', 'block');
             },
@@ -339,7 +338,7 @@
                     this.usernameInput.focus();
                 }), 0);
             }
-            
+
         });
     });
 
