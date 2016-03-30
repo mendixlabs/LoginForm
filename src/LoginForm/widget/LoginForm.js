@@ -154,8 +154,14 @@
                 if(this.autoCorrect){
                     attr.set(this._userInput, 'autocorrect', 'on');
                 }
-                if(this.autoCapitalize){
+                if(this.autoCapitalize && this.convertCase !== "none"){
                     attr.set(this._userInput, 'autocapitalize', 'on');
+                }
+
+                if (this.convertCase === "toLowerCase") {
+                    domStyle.set(this._userInput, "text-transform", "lowercase");
+                } else if (this.convertCase === "toUpperCase") {
+                    domStyle.set(this._userInput, "text-transform", "uppercase");
                 }
 
 
@@ -176,7 +182,7 @@
                     this._indicator = mx.ui.getProgress(this.progresstext);
                 }
 
-                if (typeof this.dofocus !== 'undefined' && this.dofocus) { 
+                if (typeof this.dofocus !== 'undefined' && this.dofocus) {
                     this._focusNode();
                 }
 
@@ -230,14 +236,14 @@
 
                     } else {
                         domStyle.set(this.messageNode, 'display', 'block');
-                        this.messageNode.innerHTML = this.emptytext; 
+                        this.messageNode.innerHTML = this.emptytext;
                     }
 
                     event.stop(e);
 
                     return false;
 
-                })); 
+                }));
 
                 if(this.forgotmf)
                 {
@@ -252,7 +258,7 @@
                                     actionname : action
                                 },
                                 callback	: function() {
-                                    // ok	
+                                    // ok
                                 },
                                 error		: function() {
                                     logger.error(this.id + '.forgotPwd: Error while calling microflow');
@@ -261,8 +267,16 @@
                         }
 
                         event.stop(e);
-                    }));  
+                    }));
                 }
+
+                on(this._userInput, 'keyup', lang.hitch(this, function(e) {
+                    if (this.convertCase === "toUpperCase") {
+                        this._userInput.value = this._userInput.value.toUpperCase();
+                    } else if  (this.convertCase === "toLowerCase") {
+                        this._userInput.value = this._userInput.value.toLowerCase();
+                    }
+                }));
             },
 
 
@@ -272,7 +286,7 @@
              */
             _loadData: function () {
                 // TODO, get aditional data from mendix.
-            },            
+            },
 
             _validate : function(response, ioArgs) {
                 var i18nmap = null,
@@ -343,5 +357,3 @@
     });
 
 }());
-
-
