@@ -155,7 +155,7 @@ require([
                     }
 
                     // local testing requires you to login with MxAdmin, which is case sensitive
-                    if (user.toLowerCase === "mxadmin") {
+                    if (user.toLowerCase() === "mxadmin") {
                         user = "MxAdmin";
                     }
 
