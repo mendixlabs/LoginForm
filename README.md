@@ -45,6 +45,9 @@ For more information on contributing to this repository visit [Contributing to a
 * *'Show password' button image* - Optional image to be displayed in 'Show password' button
 * *'Mask password' button image* - Optional image to be displayed in 'Mask password' button
 
+### Casehandling
+* Convert to lower/uppercase
+
 ## Known issues
 - Mendix runtime returns no feedback about the existence of a username. This is by design.
 
