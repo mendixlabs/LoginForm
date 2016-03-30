@@ -1,12 +1,11 @@
 {
   "name": "LoginForm",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "A custom login form which can be used as an alternative to the default Mendix login page.",
   "license": "",
   "author": "",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "grunt": "0.4.5",
     "grunt-contrib-clean": "^0.6.0",
@@ -20,7 +19,10 @@
     "semver": "^5.1.0",
     "node-mendix-modeler-path": "https://github.com/JelteMX/node-mendix-modeler-path/archive/v1.0.0.tar.gz"
   },
-  "repository": {"type":"git","url":"http://github.com/mendix/LoginForm"},
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mendix/LoginForm"
+  },
   "engines": {
     "node": ">=0.12.0"
   },
