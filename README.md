@@ -46,7 +46,8 @@ For more information on contributing to this repository visit [Contributing to a
 * *'Mask password' button image* - Optional image to be displayed in 'Mask password' button
 
 ### Casehandling
-* Convert to lower/uppercase - this option will convert user name input to upper/lower case. Uing this functionality only makes sense when all usernames defined in your application are either upper or lower cased.
+* Convert to lower/uppercase - this option will convert user name input to upper/lower case. Using this functionality only makes practical sense when all usernames defined in your application are either upper or lower cased.
+NOTE: MxAdmin administrative user will be available in both cases as well.
 
 ## Known issues
 - Mendix runtime returns no feedback about the existence of a username. This is by design.
