@@ -65,11 +65,11 @@ require([
 
             var templateWithView = [
                  "<div class=\"input-group\">",
-                 "    <input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\"  autocomplete=\"on\" />",
+                 "    <input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\"  autocomplete=\"on\" name=\"password\" />",
                  "    <div class=\"input-group-addon\" id=\"" + this.id + "_view\">" + this._captionShow + "</div>",
                  "</div>"
             ].join("");
-            var templateWithoutView = "<input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\" autocomplete=\"on\" />";
+            var templateWithoutView = "<input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\" autocomplete=\"on\" name=\"password\" />";
 
             //Setup controls
             this._userInput = this.usernameInput;
