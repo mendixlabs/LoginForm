@@ -65,11 +65,11 @@ require([
 
             var templateWithView = [
                  "<div class=\"input-group\">",
-                 "    <input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\" />",
+                 "    <input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\"  autocomplete=\"on\" />",
                  "    <div class=\"input-group-addon\" id=\"" + this.id + "_view\">" + this._captionShow + "</div>",
                  "</div>"
             ].join("");
-            var templateWithoutView = "<input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\" />";
+            var templateWithoutView = "<input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\" autocomplete=\"on\" />";
 
             //Setup controls
             this._userInput = this.usernameInput;
@@ -132,7 +132,7 @@ require([
 
         _setupEvents: function () {
 
-            on(this.submitButton, "click", lang.hitch(this, function(e) {
+            on(this.loginForm, "submit", lang.hitch(this, function(e) {
                 var user = null,
                     pass = null,
                     promise = null;
