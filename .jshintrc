@@ -7,6 +7,9 @@
     "quotmark" : "double",
     "eqeqeq"   : true,
     "undef"    : true,
+    "maxstatements" : 15,
+    "maxdepth" : 2,
+    "maxcomplexity" : 5,
     "globals"  : {
         "mendix" : false,
         "mx"     : false,
