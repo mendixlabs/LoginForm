@@ -197,7 +197,7 @@ define([
             if (this.forgotmf) {
                 dojoHtml.set(this.forgotPasswordLinkNode, this.forgottext);
             } else {
-                domClass.add(this.forgotPasswordNode, "hide");
+                domClass.add(this.forgotPasswordNode, "hidden");
             }
         },
         /**
@@ -269,7 +269,7 @@ define([
         _loginUser: function (e) {
             logger.debug(this.id + "._loginUser");
 
-            domClass.add(this.alertMessageNode, "hide");
+            domClass.add(this.alertMessageNode, "hidden");
 
             if (domAttr.get(this.passwordInputNode, "type") === "text") {
                 this.togglePasswordVisibility();
@@ -284,14 +284,12 @@ define([
                     this._indicator = mx.ui.showProgress();
                 }
 
-                mx.login(username, password, function (response) {
+                mx.login(username, password, dojoLang.hitch(this, function (response) {
                     // Login Successful
                     if (this._indicator) {
                         mx.ui.hideProgress(this._indicator);
                     }
-                }, dojoLang.hitch(this, function (response) {
-                    this._loginFailed(response);
-                }));
+                }), dojoLang.hitch(this, this._loginFailed));
 
             } else {
                 domClass.remove(this.alertMessageNode, "hidden");
