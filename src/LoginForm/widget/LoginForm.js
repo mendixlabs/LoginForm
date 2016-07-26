@@ -117,11 +117,6 @@ define([
             this._updateRendering();
             this._setupEvents();
         },
-        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
-        update: function (obj, callback) {
-            logger.debug(this.id + ".update");
-            mendix.lang.nullExec(callback);
-        },
         // Rerender the interface.
         _updateRendering: function () {
             logger.debug(this.id + "._updateRendering");
@@ -207,7 +202,7 @@ define([
          */
         _loginFailed : function (code) {
             logger.debug(this.id + "._loginFailed");
-            var message;
+            var message = "";
 
             if (this._indicator) {
                 mx.ui.hideProgress(this._indicator);
