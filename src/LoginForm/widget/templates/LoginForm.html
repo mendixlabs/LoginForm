@@ -1,4 +1,4 @@
-<form  data-dojo-attach-point="loginFormNode">
+<form  data-dojo-attach-point="loginFormNode" class="login-form-widget">
     <div class="messagePane alert alert-danger" data-dojo-attach-point="alertMessageNode">
     </div>
     <div class="form-group">
@@ -9,7 +9,7 @@
         <div class="input-group" data-dojo-attach-point="passwordInputGroupNode">
             <label data-dojo-attach-point="passwordLabelNode" class="hidden">${passwordLabel}</label>
             <input type="password" data-dojo-attach-point="passwordInputNode" class="form-control password" autocomplete="on" name="password" placeholder="${passexample}">
-            <div data-dojo-attach-point="passwordVisibilityToggleButtonNode" class="input-group-addon"></div>
+            <div data-dojo-attach-point="passwordVisibilityToggleButtonNode" class="input-group-addon toggle"></div>
         </div>
     </div>
     <input type="submit" class="btn btn-default submit" data-dojo-attach-point="submitButtonNode" value="${logintext}" />

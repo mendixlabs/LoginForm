@@ -1,20 +1,41 @@
-/*global logger mendix*/
+/*jslint browser: true, devel:true, nomen:true, unparam:true, plusplus: true, regexp: true*/
+/*global logger, mendix, define, mx, dojo*/
+/**
+ LoginForm
+ ========================
+ @file      : LoginForm.js
+ @version   : 3.5.0
+ @author    : Mendix
+ @date      : 7/26/2016
+ @copyright : {{copyright}}
+ @license   : Apache 2.0
+ Documentation
+ ========================
+ A custom login form which can be used as an alternative to the default Mendix login page.
+ */
 define([
 
-    "mxui/widget/_WidgetBase", "dijit/_TemplatedMixin",
-    "mxui/dom", "dojo/dom", "dojo/query", "dojo/dom-class", "dojo/dom-construct", "dojo/dom-style",
-    "dojo/on", "dojo/_base/lang", "dojo/_base/declare",
-    "dojo/text", "dojo/dom-attr", "dojo/request/xhr", "dojo/json",
+    "mxui/widget/_WidgetBase", "dijit/_TemplatedMixin", "mxui/dom",
+    "dojo/dom", "dojo/query", "dojo/dom-class",
+    "dojo/dom-construct", "dojo/dom-style", "dojo/on",
+    "dojo/_base/lang", "dojo/_base/declare", "dojo/text",
+    "dojo/dom-attr", "dojo/request/xhr", "dojo/json",
     "dojo/_base/event", "dojo/html", "dojo/has",
     "dojo/text!LoginForm/widget/templates/LoginForm.html",
     "dojo/text!LoginForm/widget/templates/LoginFormWithoutShowPassword.html", "dojo/sniff"
 
-], function (_WidgetBase, _TemplatedMixin, dom, dojoDom, dojoQuery, domClass, domConstruct, domStyle, dojoOn, dojoLang, declare, text, domAttr, dojoXhr, dojoJSON, dojoEvent, dojoHtml, dojoHas, template, templateWithoutShowPassword) {
+], function (_WidgetBase, _TemplatedMixin, dom,
+             dojoDom, dojoQuery, domClass,
+             domConstruct, domStyle, dojoOn,
+             dojoLang, declare, text,
+             domAttr, dojoXhr, dojoJSON,
+             dojoEvent, dojoHtml, dojoHas,
+             template, templateWithoutShowPassword) {
     "use strict";
     // Declare widget.
-    return declare("LoginForm.widget.LoginForm", [ _WidgetBase, _TemplatedMixin ], {
+    return declare ("LoginForm.widget.LoginForm", [ _WidgetBase, _TemplatedMixin ], {
 
-        // Template path
+        // Template path, set in the postMixInProperties function
         templateString: "",
 
         // DOM Elements
@@ -31,29 +52,44 @@ define([
         passwordLabelNode: null,
 
         // Parameters configured in the Modeler.
+        /**
+         * Display
+         */
         userexample: "Username",
         passexample: "Password",
         logintext: "Login",
         progresstext: "",
         emptytext: "No username or password given",
         forgottext: "Forgot your password?",
+        showLabels: false,
+        usernameLabel: "User name",
+        passwordLabel: "Password",
+        /**
+         * Behaviour
+         */
         showprogress: false,
+        forgotmf: "",
+        dofocus: false,
+        showLoginFailureWarning: false,
+        loginFailureText: "Your account will be blocked for 5 minutes if login with the same username fails thrice!",
+        /**
+         * Password
+         */
         showPasswordView: true,
         showButtonCaption: "Show",
         hideButtonCaption: "Mask",
         showImage: "",
         hideImage: "",
-        forgotmf: "",
-        dofocus: false,
-        convertCase: "none",
+        /**
+         * Mobile
+         */
         autoCorrect: false,
         autoCapitalize: false,
         keyboardType: "text",
-        showLabels: false,
-        usernameLabel: "User name",
-        passwordLabel: "Password",
-        showLoginFailureWarning: false,
-        loginFailureText: "Your account will be blocked for 5 minutes if login with the same username fails thrice!",
+        /**
+         * Case Handling
+         */
+        convertCase: "none",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handle: null,
@@ -61,12 +97,11 @@ define([
         _passInput : null,
         _captionShow : "",
         _captionHide : "",
-
         _indicator : null,
         _i18nmap : null,
         _setup: false,
         _loginForm_FailedAttempts: 0,
-
+        // dijit._WidgetBase.postMixInProperties is called before rendering occurs, and before any dom nodes are created.
         postMixInProperties: function () {
             logger.debug(this.id + ".postMixInProperties");
             if (this.showPasswordView === true) {
@@ -74,27 +109,23 @@ define([
             } else {
                 this.templateString = templateWithoutShowPassword;
             }
-
         },
-
+        // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work
         postCreate: function () {
             logger.debug(this.id + ".postCreate");
-
             this._getI18NMap();
             this._updateRendering();
             this._setupEvents();
         },
-
+        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             logger.debug(this.id + ".update");
-
             mendix.lang.nullExec(callback);
         },
-
+        // Rerender the interface.
         _updateRendering: function () {
             logger.debug(this.id + "._updateRendering");
-
-            domClass.add(this.alertMessageNode, "hide");
+            domClass.add(this.alertMessageNode, "hidden");
             this._addMobileOptions();
             this._showLabels();
             // Check if user wants to display the show-password toggle
@@ -119,14 +150,11 @@ define([
          */
         _styleShowPasswordButton: function () {
             if (this.showImage) {
-                this._captionShow = "<img src=\"" + this.showImage + "\" />";
+                this._captionShow = '<img src="' + this.showImage + '" />';
             }
 
             if (this.showButtonCaption.trim() !== "") {
-                if (this.showImage) {
-                    this._captionShow += "&nbsp;";
-                }
-                this._captionShow += this.showButtonCaption;
+                this._captionShow += "<span>" + this.showButtonCaption + "</span>";
             }
         },
         /**
@@ -135,14 +163,11 @@ define([
          */
         _styleMaskPasswordButton: function () {
             if (this.hideImage) {
-                this._captionHide = "<img src=\"" + this.hideImage + "\" />";
+                this._captionHide = '<img src="' + this.hideImage + '" />';
             }
 
             if (this.hideButtonCaption.trim() !== "") {
-                if (this.hideImage) {
-                    this._captionHide += "&nbsp;";
-                }
-                this._captionHide += this.hideButtonCaption;
+                this._captionHide += "<span>" + this.hideButtonCaption + "</span>";
             }
         },
         /**
@@ -180,47 +205,53 @@ define([
          * @param code
          * @private
          */
-        _loginFailed : function(code) {
+        _loginFailed : function (code) {
             logger.debug(this.id + "._loginFailed");
-            var message = "";
+            var message;
 
             if (this._indicator) {
                 mx.ui.hideProgress(this._indicator);
             }
 
             message = this.getStatusMessage(code);
-
             logger.warn("Login has failed with Code: " + code + " and Message: " + message);
 
-            if(this.showLoginFailureWarning) {
-                if(this._loginForm_FailedAttempts === 1) {
+            if (this.showLoginFailureWarning) {
+                if (this._loginForm_FailedAttempts === 1) {
                     message += "</br>" + this.loginFailureText;
                 }
-                this._loginForm_FailedAttempts++;
+                this._loginForm_FailedAttempts = this._loginForm_FailedAttempts + 1;
             }
 
             dojoHtml.set(this.alertMessageNode, message);
-            domClass.remove(this.alertMessageNode, "hide");
+            domClass.remove(this.alertMessageNode, "hidden");
         },
-
+        /**
+         * Retrieves the matching value from the internationalization object
+         * @param str
+         * @returns {*}
+         */
         translate: function (str) {
             return window.i18nMap[str];
         },
-
+        /**
+         * Gets Status message based on the login response code
+         * @param code
+         * @returns {*}
+         */
         getStatusMessage: function (code) {
             return this.translate("http" + code) || this.translate("httpdefault");
         },
-
+        // Attach events to HTML dom elements
         _setupEvents: function () {
             logger.debug(this.id + "._setupEvents");
-
             this.own(dojoOn(this.loginFormNode, "submit", dojoLang.hitch(this, this._loginUser)));
 
             if (this.forgotmf) {
                 this.own(dojoOn(this.forgotPasswordLinkNode, "click", dojoLang.hitch(this, this._forgotPassword)));
             }
 
-            if(this.passwordVisibilityToggleButtonNode) {
+            if (this.passwordVisibilityToggleButtonNode) {
                 this.own(dojoOn(this.passwordVisibilityToggleButtonNode, "click", dojoLang.hitch(this, this.togglePasswordVisibility)));
             }
         },
@@ -235,8 +266,8 @@ define([
          * @param e
          * @private
          */
-        _loginUser: function(e) {
-            logger.debug(this.id + ".submitForm");
+        _loginUser: function (e) {
+            logger.debug(this.id + "._loginUser");
 
             domClass.add(this.alertMessageNode, "hide");
 
@@ -253,36 +284,37 @@ define([
                     this._indicator = mx.ui.showProgress();
                 }
 
-                mx.login(username, password, function(response) {
+                mx.login(username, password, function (response) {
                     // Login Successful
-                }, dojoLang.hitch(this, function(response) {
+                    if (this._indicator) {
+                        mx.ui.hideProgress(this._indicator);
+                    }
+                }, dojoLang.hitch(this, function (response) {
                     this._loginFailed(response);
                 }));
 
             } else {
-                domClass.remove(this.alertMessageNode, "hide");
+                domClass.remove(this.alertMessageNode, "hidden");
                 this.alertMessageNode.innerHTML = this.emptytext;
             }
 
             dojoEvent.stop(e);
-
         },
         /**
          * Triggers Forgot-Password Microflow. Takes in an event parameter
          * @param e
          * @private
          */
-        _forgotPassword: function(e) {
+        _forgotPassword: function (e) {
             logger.debug(this.id + "._forgotPassword");
-
             mx.data.action({
-                params       : {
+                params: {
                     actionname : this.forgotmf
                 },
-                callback	: function() {
-                    logger.debug("Forgot Password Microflow Triggered Successfully!");
-                },
-                error		: dojoLang.hitch(this, function(error) {
+                callback: dojoLang.hitch(this, function () {
+                    logger.debug(this.id, "Forgot Password Microflow Triggered Successfully!");
+                }),
+                error: dojoLang.hitch(this, function (error) {
                     logger.error(this.id + "._forgotPassword: Error while calling microflow " + this.forgotmf, error);
                 })
             });
@@ -301,24 +333,21 @@ define([
                 dojoHtml.set(this.passwordVisibilityToggleButtonNode, this._captionShow);
             }
         },
-
-        _getI18NMap : function() {
+        /**
+         * Retrieves internalization mapping
+         * @private
+         */
+        _getI18NMap : function () {
             logger.debug(this.id + "._getI18NMap");
-
             if (!window.i18n) {
                 dojoXhr(mx.appUrl + "js/login_i18n.js", {
                     handleAs: "javascript"
-                }).then(dojoLang.hitch(this, function(data){
+                }).then(dojoLang.hitch(this, function (data) {
                     this._i18nmap = window.i18nMap;
-                }), function(err){
+                }), dojoLang.hitch(this, function (err) {
                     logger.debug(this.id + "._getI18Map: Failed to get i18NMap!", err);
-                }, function(evt){
-                    // Handle a progress event from the request if the
-                    // browser supports XHR2
-                });
+                }));
             }
-
-
         },
         /**
          * Changes the Case of the passed in username to either uppercase or lowercase
@@ -328,28 +357,27 @@ define([
         _changeCase: function (username) {
             if (this.convertCase === "toUpperCase") {
                 return username.toUpperCase();
-            } else if  (this.convertCase === "toLowerCase") {
+            }
+            if  (this.convertCase === "toLowerCase") {
                 return username.toLowerCase();
             }
-
             return username;
         },
-
-        _focusNode : function() {
+        /**
+         * Sets focus to the username input node if not the default
+         * @private
+         */
+        _focusNode : function () {
             logger.debug(this.id + "._focusNode");
-
             //Even with timeout set to 0, function code is made asynchronous
-            setTimeout(dojoLang.hitch(this, function() {
-                this.usernameInputNode.focus();
-            }), 0);
-
+            setTimeout(dojoLang.hitch(this, this.usernameInputNode.focus()), 0);
         },
         /**
          * Detects if widget is running on mobile device and sets the available options e.g Keyboard Type
          * @private
          */
         _addMobileOptions: function () {
-            if(dojoHas("ios") || dojoHas("android") || dojoHas("bb")) {
+            if (dojoHas("ios") || dojoHas("android") || dojoHas("bb")) {
                 domAttr.set(this.usernameInputNode, "type", this.keyboardType);
             }
         },
@@ -358,12 +386,11 @@ define([
          * @private
          */
         _showLabels: function () {
-            if(this.showLabels) {
+            if (this.showLabels) {
                 domClass.remove(this.usernameLabelNode, "hidden");
                 domClass.remove(this.passwordLabelNode, "hidden");
             }
         }
-
     });
 });
 

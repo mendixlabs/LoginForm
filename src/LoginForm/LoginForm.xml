@@ -79,6 +79,17 @@
             <category>Behavior</category>
             <description>Warning message to show when login fails twice</description>
         </property>
+        <property key="forgotmf" type="microflow" required="false">
+            <caption>Forgot Password Microflow</caption>
+            <category>Behavior</category>
+            <description>Triggered on clicking the Forgot Password link</description>
+            <returnType type="Void"/>
+        </property>
+        <property key="dofocus" type="boolean" defaultValue="false">
+            <caption>Focus Username Input Field</caption>
+            <category>Behavior</category>
+            <description>When form is shown, username filed takes focus (If not automatic)</description>
+        </property>
         <property key="showPasswordView" type="boolean" defaultValue="false">
             <caption>Show/Mask Password Toggle</caption>
             <category>Password</category>
@@ -103,17 +114,6 @@
             <caption>Mask Password Button Image</caption>
             <category>Password</category>
             <description>Optional image to be displayed on Mask Password button.</description>
-        </property>
-        <property key="forgotmf" type="microflow" required="false">
-            <caption>Forgot Password Microflow</caption>
-            <category>Behavior</category>
-            <description>Triggered on clicking the Forgot Password link</description>
-            <returnType type="Void"/>
-        </property>
-        <property key="dofocus" type="boolean" defaultValue="false">
-            <caption>Focus Username Input Field</caption>
-            <category>Behavior</category>
-            <description>When form is shown, username filed takes focus (If not automatic)</description>
         </property>
         <property key="convertCase" type="enumeration" defaultValue="none">
             <caption>Convert to lowercase/uppercase</caption>

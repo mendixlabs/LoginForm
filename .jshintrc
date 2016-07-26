@@ -10,6 +10,11 @@
     "maxstatements" : 15,
     "maxdepth" : 2,
     "maxcomplexity" : 5,
+    "nonbsp" : true,
+    "nonem" : true,
+    "unparam" : true,
+    "plusplus" : true,
+    "regexp" : true,
     "globals"  : {
         "mendix" : false,
         "mx"     : false,
