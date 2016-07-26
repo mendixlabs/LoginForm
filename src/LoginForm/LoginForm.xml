@@ -49,11 +49,6 @@
             <category>Display</category>
             <description>Login button caption</description>
         </property>
-        <property key="progresstext" type="string" required="false">
-            <caption>Progress Bar Caption</caption>
-            <category>Display</category>
-            <description>Text to display in progress indicator</description>
-        </property>
         <property key="emptytext" type="string" required="false" defaultValue="No username or password given">
             <caption>Empty Username or Password Text</caption>
             <category>Display</category>

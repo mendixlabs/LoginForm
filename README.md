@@ -26,7 +26,6 @@ For more information on contributing to this repository visit [Contributing to a
 * *Username Label* - Username label caption
 * *Password Label* - Password label caption
 * *Login button caption* - Text to be displayed on login button
-* *Progress bar caption* - Text to display in progress bar, displayed while login request executes
 * *Empty username/password message* - Feedback message shown when a user didn't provide all credentials
 * *Forgot password link text* - Text to use in the Forgot password link
 
