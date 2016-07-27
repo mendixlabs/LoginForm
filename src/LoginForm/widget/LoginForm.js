@@ -7,7 +7,7 @@
  @version   : 3.5.0
  @author    : Mendix
  @date      : 7/26/2016
- @copyright : {{copyright}}
+ @copyright : Mendix B.V.
  @license   : Apache 2.0
  Documentation
  ========================
@@ -137,7 +137,6 @@ define([
             if (this.dofocus) {
                 this._focusNode();
             }
-
         },
         /**
          * Conditionally sets the icon and caption of the show-password button
@@ -145,7 +144,7 @@ define([
          */
         _styleShowPasswordButton: function () {
             if (this.showImage) {
-                this._captionShow = '<img src="' + this.showImage + '" />';
+                this._captionShow = "<img src=\"" + this.showImage + "\" />";
             }
 
             if (this.showButtonCaption.trim() !== "") {
@@ -158,7 +157,7 @@ define([
          */
         _styleMaskPasswordButton: function () {
             if (this.hideImage) {
-                this._captionHide = '<img src="' + this.hideImage + '" />';
+                this._captionHide = "<img src=\"" + this.hideImage + "\" />";
             }
 
             if (this.hideButtonCaption.trim() !== "") {
@@ -202,13 +201,12 @@ define([
          */
         _loginFailed : function (code) {
             logger.debug(this.id + "._loginFailed");
-            var message = "";
 
             if (this._indicator) {
                 mx.ui.hideProgress(this._indicator);
             }
 
-            message = this.getStatusMessage(code);
+            var message = this.getStatusMessage(code);
             logger.warn("Login has failed with Code: " + code + " and Message: " + message);
 
             if (this.showLoginFailureWarning) {

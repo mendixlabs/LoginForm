@@ -1,3 +1,7 @@
+.login-form-widget .toggle {
+    cursor: pointer;
+}
+
 .login-form-widget .toggle span {
     padding-left: 5px;
 }
