@@ -1,12 +1,19 @@
-<form  dojoAttachPoint="loginForm">
-    <div class="messagePane alert alert-danger" dojoAttachPoint="messageNode">
+<form  data-dojo-attach-point="loginFormNode" class="login-form-widget">
+    <div class="messagePane alert alert-danger" data-dojo-attach-point="alertMessageNode">
     </div>
     <div class="form-group">
-        <input type="text" class="form-control username"  autocapitalize="off" autocorrect="off" dojoAttachPoint="usernameInput" autocomplete="on" name="username" />
+        <label data-dojo-attach-point="usernameLabelNode" class="hidden">${usernameLabel}</label>
+        <input type="text" class="form-control username"  autocapitalize="off" autocorrect="off" data-dojo-attach-point="usernameInputNode" autocomplete="on" name="username" placeholder="${userexample}" />
     </div>
-    <div class="form-group" dojoAttachPoint="passwordContainer"></div>
-    <input type="submit" class="btn btn-default submit" dojoAttachPoint="submitButton" />
-    <span class="forgotPwd" dojoAttachPoint="forgotPane">
-        <a class="forgotPwd" href="#" dojoAttachPoint="forgotLink"></a>
+    <div class="form-group" data-dojo-attach-point="passwordContainerNode">
+        <div class="input-group" data-dojo-attach-point="passwordInputGroupNode">
+            <label data-dojo-attach-point="passwordLabelNode" class="hidden">${passwordLabel}</label>
+            <input type="password" data-dojo-attach-point="passwordInputNode" class="form-control password" autocomplete="on" name="password" placeholder="${passexample}">
+            <div data-dojo-attach-point="passwordVisibilityToggleButtonNode" class="input-group-addon toggle"></div>
+        </div>
+    </div>
+    <input type="submit" class="btn btn-default submit" data-dojo-attach-point="submitButtonNode" value="${logintext}" />
+    <span class="forgotPwd" data-dojo-attach-point="forgotPasswordNode">
+        <a class="forgotPwd" href="#" data-dojo-attach-point="forgotPasswordLinkNode"></a>
     </span>
 </form>

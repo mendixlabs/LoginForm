@@ -23,27 +23,29 @@ For more information on contributing to this repository visit [Contributing to a
 ### Display
 * *Username placeholder* - Standard text to be displayed in username field
 * *Password placeholder* - Standard text to be displayed in password field
-* *'Login' button caption* - Text to be displayed on login button
-* *Progress bar caption* - Text to display in progress bar, displayed while login request executes
+* *Username Label* - Username label caption
+* *Password Label* - Password label caption
+* *Login button caption* - Text to be displayed on login button
 * *Empty username/password message* - Feedback message shown when a user didn't provide all credentials
-* *'Forgot password' link text* - Text to use in Forgot password link
+* *Forgot password link text* - Text to use in the Forgot password link
 
 ### Behaviour
 * *Show progress bar* - Display a progress bar while signing in
 * *Forgot password microflow* - Microflow being triggered in case of 'forgot password' onclick
 * *Focus username input field* - Move focus to username field when the form is showed (only use this if it is not done automatically)
-
+* *Login Failure Text* - Warning message to show when login fails twice
 
 ### Mobile
 * *Auto capitalize* - Enables/disables auto capitalize functionality on username input field for mobile devices
 * *Auto correct* - Enables/disables auto correct functionality on username input field for mobile devices
+* *Username Keyboard Type* - The keyboard type to display when the user is entering their username
 
 ### Password
 * *Show/mask password toggle* - Adds a toggle button to show/mask password.*
-* *'Show password' button caption* - The caption that is used for the show button for the value of the password
-* *'Mask password' button caption* - The caption that is used for the hide button for the value of the password
-* *'Show password' button image* - Optional image to be displayed in 'Show password' button
-* *'Mask password' button image* - Optional image to be displayed in 'Mask password' button
+* *Show password button caption* - The caption that is used for the show button for the value of the password
+* *Mask password button caption* - The caption that is used for the hide button for the value of the password
+* *Show password button image* - Optional image to be displayed in 'Show password' button
+* *Mask password button image* - Optional image to be displayed in 'Mask password' button
 
 ### Casehandling
 * Convert to lower/uppercase - this option will convert user name input to upper/lower case. Using this functionality only makes practical sense when all usernames defined in your application are either upper or lower cased.

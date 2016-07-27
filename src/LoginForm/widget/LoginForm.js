@@ -1,299 +1,389 @@
-require([
+/*jslint browser: true, devel:true, nomen:true, unparam:true, plusplus: true, regexp: true*/
+/*global logger, mendix, define, mx, dojo*/
+/**
+ LoginForm
+ ========================
+ @file      : LoginForm.js
+ @version   : 3.5.0
+ @author    : Mendix
+ @date      : 7/26/2016
+ @copyright : {{copyright}}
+ @license   : Apache 2.0
+ Documentation
+ ========================
+ A custom login form which can be used as an alternative to the default Mendix login page.
+ */
+define([
 
-    "mxui/widget/_WidgetBase", "dijit/_Widget", "dijit/_TemplatedMixin",
-    "mxui/dom", "dojo/dom", "dojo/query", "dojo/dom-prop", "dojo/dom-geometry", "dojo/dom-class", "dojo/dom-construct", "dojo/dom-style", "dojo/on", "dojo/_base/lang", "dojo/_base/declare", "dojo/text", "dojo/dom-attr", "dojo/request/xhr", "dojo/_base/json",
-    "dojo/_base/event", "dojo/_base/window",
-    "dojo/text!LoginForm/widget/templates/LoginForm.html"
+    "mxui/widget/_WidgetBase", "dijit/_TemplatedMixin", "mxui/dom",
+    "dojo/dom", "dojo/query", "dojo/dom-class",
+    "dojo/dom-construct", "dojo/dom-style", "dojo/on",
+    "dojo/_base/lang", "dojo/_base/declare", "dojo/text",
+    "dojo/dom-attr", "dojo/request/xhr", "dojo/json",
+    "dojo/_base/event", "dojo/html", "dojo/has",
+    "dojo/text!LoginForm/widget/templates/LoginForm.html",
+    "dojo/text!LoginForm/widget/templates/LoginFormWithoutShowPassword.html", "dojo/sniff"
 
-], function (_WidgetBase, _Widget, _TemplatedMixin, domMx, dom, domQuery, domProp, domGeom, domClass, domConstruct, domStyle, on, lang, declare, text, attr, xhr, dojoJSON, event, win, template) {
-
+], function (_WidgetBase, _TemplatedMixin, dom,
+             dojoDom, dojoQuery, domClass,
+             domConstruct, domStyle, dojoOn,
+             dojoLang, declare, text,
+             domAttr, dojoXhr, dojoJSON,
+             dojoEvent, dojoHtml, dojoHas,
+             template, templateWithoutShowPassword) {
+    "use strict";
     // Declare widget.
-    return declare("LoginForm.widget.LoginForm", [ _WidgetBase, _Widget, _TemplatedMixin ], {
+    return declare ("LoginForm.widget.LoginForm", [ _WidgetBase, _TemplatedMixin ], {
 
-        // Template path
-        templateString: template,
+        // Template path, set in the postMixInProperties function
+        templateString: "",
 
+        // DOM Elements
+        loginFormNode: null,
+        alertMessageNode: null,
+        usernameInputNode: null,
+        passwordContainerNode: null,
+        passwordInputNode: null,
+        passwordVisibilityToggleButtonNode: null,
+        submitButtonNode: null,
+        forgotPasswordNode: null,
+        forgotPasswordLinkNode: null,
+        usernameLabelNode: null,
+        passwordLabelNode: null,
+
+        // Parameters configured in the Modeler.
+        /**
+         * Display
+         */
+        userexample: "Username",
+        passexample: "Password",
+        logintext: "Login",
+        progresstext: "",
+        emptytext: "No username or password given",
+        forgottext: "Forgot your password?",
+        showLabels: false,
+        usernameLabel: "User name",
+        passwordLabel: "Password",
+        /**
+         * Behaviour
+         */
+        showprogress: false,
+        forgotmf: "",
+        dofocus: false,
+        showLoginFailureWarning: false,
+        loginFailureText: "Your account will be blocked for 5 minutes if login with the same username fails thrice!",
+        /**
+         * Password
+         */
+        showPasswordView: true,
+        showButtonCaption: "Show",
+        hideButtonCaption: "Mask",
+        showImage: "",
+        hideImage: "",
+        /**
+         * Mobile
+         */
+        autoCorrect: false,
+        autoCapitalize: false,
+        keyboardType: "text",
+        /**
+         * Case Handling
+         */
+        convertCase: "none",
+
+        // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handle: null,
         _userInput : null,
         _passInput : null,
-        _captionShow : null,
-        _captionHide : null,
-
+        _captionShow : "",
+        _captionHide : "",
         _indicator : null,
         _i18nmap : null,
         _setup: false,
-
+        _loginForm_FailedAttempts: 0,
+        // dijit._WidgetBase.postMixInProperties is called before rendering occurs, and before any dom nodes are created.
+        postMixInProperties: function () {
+            logger.debug(this.id + ".postMixInProperties");
+            if (this.showPasswordView === true) {
+                this.templateString = template;
+            } else {
+                this.templateString = templateWithoutShowPassword;
+            }
+        },
+        // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work
         postCreate: function () {
-            this._setupWidget();
+            logger.debug(this.id + ".postCreate");
+            this._getI18NMap();
+            this._updateRendering();
             this._setupEvents();
         },
+        // Rerender the interface.
+        _updateRendering: function () {
+            logger.debug(this.id + "._updateRendering");
+            domClass.add(this.alertMessageNode, "hidden");
+            this._addMobileOptions();
+            this._showLabels();
+            // Check if user wants to display the show-password toggle
+            if (this.showPasswordView === true) {
+                this._styleMaskPasswordButton();
+                this._styleShowPasswordButton();
+                domConstruct.place(this._captionShow, this.passwordVisibilityToggleButtonNode, "only");
+            }
 
-        update: function (obj, callback) {
-            if (!this._setup) {
-                this._setupWidget(callback);
-            } else {
-                callback();
+            this._setUsernameInputAttributes();
+            this._forgotPasswordLink();
+
+            // Captures focus for the input node. (Already automatically set, so can only if not done automatically)
+            if (this.dofocus) {
+                this._focusNode();
+            }
+
+        },
+        /**
+         * Conditionally sets the icon and caption of the show-password button
+         * @private
+         */
+        _styleShowPasswordButton: function () {
+            if (this.showImage) {
+                this._captionShow = '<img src="' + this.showImage + '" />';
+            }
+
+            if (this.showButtonCaption.trim() !== "") {
+                this._captionShow += "<span>" + this.showButtonCaption + "</span>";
             }
         },
-
-        _setupWidget: function (callback) {
-
-            if (this.showImage) {
-                this._captionShow = "<img src=\"" + this.showImage + "\" id=\"" + this.id + "_image\" />";
-            } else {
-                this._captionShow = "";
-            }
+        /**
+         * Conditionally sets the icon and caption of the mask-password button
+         * @private
+         */
+        _styleMaskPasswordButton: function () {
             if (this.hideImage) {
-                this._captionHide = "<img src=\"" + this.hideImage + "\" id=\"" + this.id + "_image\" />";
-            } else {
-                this._captionHide = "";
+                this._captionHide = '<img src="' + this.hideImage + '" />';
             }
 
-            if (this.showButtonCaption !== "") {
-                if (this.showImage) {
-                    this._captionShow += "&nbsp;";
-                }
-                this._captionShow += this.showButtonCaption;
+            if (this.hideButtonCaption.trim() !== "") {
+                this._captionHide += "<span>" + this.hideButtonCaption + "</span>";
             }
-
-            if (this.hideButtonCaption !== "") {
-                if (this.hideImage) {
-                    this._captionHide += "&nbsp;";
-                }
-                this._captionHide += this.hideButtonCaption;
-            }
-
-            var templateWithView = [
-                 "<div class=\"input-group\">",
-                 "    <input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\"  autocomplete=\"on\" name=\"password\" />",
-                 "    <div class=\"input-group-addon\" id=\"" + this.id + "_view\">" + this._captionShow + "</div>",
-                 "</div>"
-            ].join("");
-            var templateWithoutView = "<input type=\"password\" class=\"form-control password\" id=\"" + this.id + "_password\" autocomplete=\"on\" name=\"password\" />";
-
-            //Setup controls
-            this._userInput = this.usernameInput;
-            attr.set(this._userInput, "placeholder", this.userexample);
-
-            if (this.showPasswordView === false) {
-                this.passwordContainer.innerHTML = templateWithoutView;
-            } else {
-                this.passwordContainer.innerHTML = templateWithView;
-                this.connect(dom.byId(this.id + "_view"), "click", dojo.hitch(this, function () {
-                    if (attr.get(this._passInput, "type") === "password") {
-                        attr.set(this._passInput, "type", "text");
-                        dom.byId(this.id + "_view").innerHTML = this._captionHide;
-                    } else {
-                        attr.set(this._passInput, "type", "password");
-                        dom.byId(this.id + "_view").innerHTML = this._captionShow;
-                    }
-                }));
-            }
-            this._passInput = dom.byId(this.id + "_password");
-
-            attr.set(this._passInput, "placeholder", this.passexample);
-
+        },
+        /**
+         * Conditionally sets the Username node input attributes
+         * e.g autocorrect, autocapitalize, text-transform
+         * @private
+         */
+        _setUsernameInputAttributes: function () {
             if (this.autoCorrect) {
-                attr.set(this._userInput, "autocorrect", "on");
+                domAttr.set(this.usernameInputNode, "autocorrect", "on");
             }
             if (this.autoCapitalize && this.convertCase !== "none") {
-                attr.set(this._userInput, "autocapitalize", "on");
+                domAttr.set(this.usernameInputNode, "autocapitalize", "on");
             }
 
             if (this.convertCase === "toLowerCase") {
-                domStyle.set(this._userInput, "text-transform", "lowercase");
+                domStyle.set(this.usernameInputNode, "text-transform", "lowercase");
             } else if (this.convertCase === "toUpperCase") {
-                domStyle.set(this._userInput, "text-transform", "uppercase");
-            }
-
-
-            // Setup text input elements
-            this.submitButton.value = this.logintext;
-
+                domStyle.set(this.usernameInputNode, "text-transform", "uppercase");
+            }// Else this.convertCase === "None", in which case, do nothing
+        },
+        /**
+         * Shows or hides the forgot-password link
+         * @private
+         */
+        _forgotPasswordLink: function () {
             if (this.forgotmf) {
-                this.forgotLink.innerHTML = this.forgottext;
+                dojoHtml.set(this.forgotPasswordLinkNode, this.forgottext);
             } else {
-                domStyle.set(this.forgotPane, "display", "none");
+                domClass.add(this.forgotPasswordNode, "hidden");
             }
-
-            domStyle.set(this.messageNode, "display", "none");
-
-            this._getI18NMap();
-
-            if (this.showprogress) {
-                this._indicator = mx.ui.getProgress(this.progresstext);
-            }
-
-            if (typeof this.dofocus !== "undefined" && this.dofocus) {
-                this._focusNode();
-            }
-            mendix.lang.nullExec(callback);
         },
+        /**
+         * Controls what happens when Login Fails based on the passed in response code
+         * @param code
+         * @private
+         */
+        _loginFailed : function (code) {
+            logger.debug(this.id + "._loginFailed");
+            var message = "";
 
+            if (this._indicator) {
+                mx.ui.hideProgress(this._indicator);
+            }
+
+            message = this.getStatusMessage(code);
+            logger.warn("Login has failed with Code: " + code + " and Message: " + message);
+
+            if (this.showLoginFailureWarning) {
+                if (this._loginForm_FailedAttempts === 1) {
+                    message += "</br>" + this.loginFailureText;
+                }
+                this._loginForm_FailedAttempts = this._loginForm_FailedAttempts + 1;
+            }
+
+            dojoHtml.set(this.alertMessageNode, message);
+            domClass.remove(this.alertMessageNode, "hidden");
+        },
+        /**
+         * Retrieves the matching value from the internationalization object
+         * @param str
+         * @returns {*}
+         */
+        translate: function (str) {
+            return window.i18nMap[str];
+        },
+        /**
+         * Gets Status message based on the login response code
+         * @param code
+         * @returns {*}
+         */
+        getStatusMessage: function (code) {
+            return this.translate("http" + code) || this.translate("httpdefault");
+        },
+        // Attach events to HTML dom elements
         _setupEvents: function () {
-
-            on(this.loginForm, "submit", lang.hitch(this, function(e) {
-                var user = null,
-                    pass = null,
-                    promise = null;
-
-                domStyle.set(this.messageNode, "display", "none");
-
-                if (attr.get(this._passInput, "type") === "text") {
-                    attr.set(this._passInput, "type", "password");
-                    dom.byId(this.id + "_view").innerHTML = this._captionShow;
-                }
-
-                logger.debug(this.id + ".submitForm");
-
-                user = this._userInput.value;
-                pass = this._passInput.value;
-
-                if (user && pass) {
-                    if (typeof this._indicator !== "undefined" && this._indicator) {
-                        this._indicator.start();
-                    }
-
-                    // local testing requires you to login with MxAdmin, which is case sensitive
-                    if (user.toLowerCase() === "mxadmin") {
-                        user = "MxAdmin";
-                    }
-
-                    dojo.rawXhrPost({
-                        url			: mx.baseUrl,
-                        mimetype	: "application/json",
-                        contentType	: "application/json",
-                        handleAs	: "json",
-                        headers     : {
-                            "csrfToken" : mx.session.getCSRFToken()
-                        },
-                        postData	: dojoJSON.toJson({
-                            action		: "login",
-                            params		: {
-                                username	: user,
-                                password	: pass,
-                                locale		: ""
-                            }
-                        }),
-                        handle		: lang.hitch(this, this._validate)
-                    });
-
-                } else {
-                    domStyle.set(this.messageNode, "display", "block");
-                    this.messageNode.innerHTML = this.emptytext;
-                }
-
-                event.stop(e);
-
-                return false;
-
-            }));
+            logger.debug(this.id + "._setupEvents");
+            this.own(dojoOn(this.loginFormNode, "submit", dojoLang.hitch(this, this._loginUser)));
 
             if (this.forgotmf) {
-                on(this.forgotLink, "click", lang.hitch(this, function(e) {
-                    logger.debug(this.id + ".forgotPwd");
-
-                    var action = this.forgotmf;
-
-                    if (action) {
-                        mx.data.action({
-                            params       : {
-                                actionname : action
-                            },
-                            callback	: function() {
-                                // ok
-                            },
-                            error		: function() {
-                                logger.error(this.id + ".forgotPwd: Error while calling microflow");
-                            }
-                        });
-                    }
-
-                    event.stop(e);
-                }));
+                this.own(dojoOn(this.forgotPasswordLinkNode, "click", dojoLang.hitch(this, this._forgotPassword)));
             }
 
-            on(this._userInput, "keyup", lang.hitch(this, function(e) {
-                if (this.convertCase === "toUpperCase") {
-                    this._userInput.value = this._userInput.value.toUpperCase();
-                } else if  (this.convertCase === "toLowerCase") {
-                    this._userInput.value = this._userInput.value.toLowerCase();
-                }
-            }));
+            if (this.passwordVisibilityToggleButtonNode) {
+                this.own(dojoOn(this.passwordVisibilityToggleButtonNode, "click", dojoLang.hitch(this, this.togglePasswordVisibility)));
+            }
         },
-
 
         /**
-        * Interaction widget methods.
+        * Widget Interaction Methods.
         * ======================
         */
-        _loadData: function () {
-            // TODO, get aditional data from mendix.
-        },
 
-        _validate : function(response, ioArgs) {
-            var i18nmap = null,
-                span = null,
-                message = " ";
+        /**
+         * Attempts to login the user. Takes in an Event Parameter
+         * @param e
+         * @private
+         */
+        _loginUser: function (e) {
+            logger.debug(this.id + "._loginUser");
 
-            if (typeof this._indicator !== "undefined" && this._indicator) {
-                this._indicator.stop();
+            domClass.add(this.alertMessageNode, "hidden");
+
+            if (domAttr.get(this.passwordInputNode, "type") === "text") {
+                this.togglePasswordVisibility();
             }
 
-            i18nmap = this._i18nmap;
+            var username = this._changeCase(this.usernameInputNode.value);
+            var password = this.passwordInputNode.value;
 
-            switch(ioArgs.xhr.status) {
-                case 200 :
-                mx.login();
-                return;
-                case 400 :
-                case 401 :
-                message += i18nmap.http401;
-                break;
-                case 402 :
-                case 403 :
-                message += i18nmap.http401;
-                break;
-                case 404 :
-                message += i18nmap.http404;
-                break;
-                case 500 :
-                message += i18nmap.http500;
-                break;
-                case 503 :
-                message += i18nmap.http503;
-                break;
-                default :
-                message += i18nmap.httpdefault;
-                break;
+            if (username && password) {
+                if (this.showprogress) {
+                    logger.debug("Showing Progress!!");
+                    this._indicator = mx.ui.showProgress();
+                }
+
+                mx.login(username, password, dojoLang.hitch(this, function (response) {
+                    // Login Successful
+                    if (this._indicator) {
+                        mx.ui.hideProgress(this._indicator);
+                    }
+                }), dojoLang.hitch(this, this._loginFailed));
+
+            } else {
+                domClass.remove(this.alertMessageNode, "hidden");
+                this.alertMessageNode.innerHTML = this.emptytext;
             }
 
-            this.messageNode.innerHTML = message; // is only reached when xhrstatus !== 200
-            domStyle.set(this.messageNode, "display", "block");
+            dojoEvent.stop(e);
         },
+        /**
+         * Triggers Forgot-Password Microflow. Takes in an event parameter
+         * @param e
+         * @private
+         */
+        _forgotPassword: function (e) {
+            logger.debug(this.id + "._forgotPassword");
+            mx.data.action({
+                params: {
+                    actionname : this.forgotmf
+                },
+                callback: dojoLang.hitch(this, function () {
+                    logger.debug(this.id, "Forgot Password Microflow Triggered Successfully!");
+                }),
+                error: dojoLang.hitch(this, function (error) {
+                    logger.error(this.id + "._forgotPassword: Error while calling microflow " + this.forgotmf, error);
+                })
+            });
 
-        _getI18NMap : function() {
-            logger.debug(this.id + ".injectI18NMap");
-
+            dojoEvent.stop(e);
+        },
+        /**
+         * Show/hide the Password
+         */
+        togglePasswordVisibility : function () {
+            if (domAttr.get(this.passwordInputNode, "type") === "password") {
+                domAttr.set(this.passwordInputNode, "type", "text");
+                dojoHtml.set(this.passwordVisibilityToggleButtonNode, this._captionHide);
+            } else {
+                domAttr.set(this.passwordInputNode, "type", "password");
+                dojoHtml.set(this.passwordVisibilityToggleButtonNode, this._captionShow);
+            }
+        },
+        /**
+         * Retrieves internalization mapping
+         * @private
+         */
+        _getI18NMap : function () {
+            logger.debug(this.id + "._getI18NMap");
             if (!window.i18n) {
-                dojo.xhrGet({
-                    url			: mx.appUrl + "js/login_i18n.js",
-                    handleAs	: "javascript",
-                    sync		: true
-                });
+                dojoXhr(mx.appUrl + "js/login_i18n.js", {
+                    handleAs: "javascript"
+                }).then(dojoLang.hitch(this, function (data) {
+                    this._i18nmap = window.i18nMap;
+                }), dojoLang.hitch(this, function (err) {
+                    logger.debug(this.id + "._getI18Map: Failed to get i18NMap!", err);
+                }));
             }
-
-            this._i18nmap = window.i18nMap;
         },
-
-        _focusNode : function() {
-            logger.debug(this.id + ".focusNode");
-
-            setTimeout(lang.hitch(this, function() {
-                this.usernameInput.focus();
-            }), 0);
+        /**
+         * Changes the Case of the passed in username to either uppercase or lowercase
+         * @param username
+         * @private
+         */
+        _changeCase: function (username) {
+            if (this.convertCase === "toUpperCase") {
+                return username.toUpperCase();
+            }
+            if  (this.convertCase === "toLowerCase") {
+                return username.toLowerCase();
+            }
+            return username;
+        },
+        /**
+         * Sets focus to the username input node if not the default
+         * @private
+         */
+        _focusNode : function () {
+            logger.debug(this.id + "._focusNode");
+            //Even with timeout set to 0, function code is made asynchronous
+            setTimeout(dojoLang.hitch(this, this.usernameInputNode.focus()), 0);
+        },
+        /**
+         * Detects if widget is running on mobile device and sets the available options e.g Keyboard Type
+         * @private
+         */
+        _addMobileOptions: function () {
+            if (dojoHas("ios") || dojoHas("android") || dojoHas("bb")) {
+                domAttr.set(this.usernameInputNode, "type", this.keyboardType);
+            }
+        },
+        /**
+         * Handles whether to show/hide the Username and Password Labels
+         * @private
+         */
+        _showLabels: function () {
+            if (this.showLabels) {
+                domClass.remove(this.usernameLabelNode, "hidden");
+                domClass.remove(this.passwordLabelNode, "hidden");
+            }
         }
-
     });
 });
 

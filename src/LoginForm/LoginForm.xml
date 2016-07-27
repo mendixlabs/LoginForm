@@ -1,4 +1,7 @@
-<widget id="LoginForm.widget.LoginForm" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
+<widget id="LoginForm.widget.LoginForm" needsEntityContext="false"
+        xmlns="http://www.mendix.com/widget/1.0/"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../../xsd/widget.xsd">
     <name>LoginForm</name>
     <description>Login form</description>
     <icon>
@@ -17,80 +20,100 @@
     </icon>
     <properties>
         <property key="userexample" type="string" defaultValue="Username" required="false">
-            <caption>Username placeholder</caption>
+            <caption>Username Placeholder</caption>
             <category>Display</category>
             <description>Input box sample value</description>
         </property>
         <property key="passexample" type="string" defaultValue="Password" required="false">
-            <caption>Password placeholder</caption>
+            <caption>Password Placeholder</caption>
             <category>Display</category>
             <description>Input box sample value</description>
         </property>
-        <property key="logintext" type="string" defaultValue="Login">
-            <caption>'Login' button caption</caption>
+        <property key="showLabels" type="boolean" defaultValue="false">
+            <caption>Show Labels</caption>
             <category>Display</category>
-            <description>Caption of login button</description>
+            <description>Show username and password labels</description>
         </property>
-        <property key="progresstext" type="string" required="false">
-            <caption>Progress bar caption</caption>
+        <property key="usernameLabel" type="string" defaultValue="User name" required="false">
+            <caption>Username Label</caption>
             <category>Display</category>
-            <description>Text to display in progress bar</description>
+            <description>Username label caption (Only used if Show Labels is Yes)</description>
+        </property>
+        <property key="passwordLabel" type="string" defaultValue="Password" required="false">
+            <caption>Password Label</caption>
+            <category>Display</category>
+            <description>Password label caption (Only used if Show Labels is Yes)</description>
+        </property>
+        <property key="logintext" type="string" defaultValue="Login">
+            <caption>Login Button Caption</caption>
+            <category>Display</category>
+            <description>Login button caption</description>
         </property>
         <property key="emptytext" type="string" required="false" defaultValue="No username or password given">
-            <caption>Empty username or password text</caption>
+            <caption>Empty Username or Password Text</caption>
             <category>Display</category>
-            <description>Text to display in case of form being submitted without username or password</description>
+            <description>Displayed when Username or Password is empty</description>
         </property>
         <property key="forgottext" type="string" required="false" defaultValue="Forgot your password?">
-            <caption>'Forgot password' link text</caption>
+            <caption>Forgot Password Link Text</caption>
             <category>Display</category>
-            <description>Text to display in 'forgot password' link</description>
+            <description>Text in Forgot Password link</description>
         </property>
         <property key="showprogress" type="boolean" defaultValue="false">
-            <caption>Show progress bar</caption>
+            <caption>Show Progress Bar</caption>
             <category>Behavior</category>
             <description>Display a progress bar while signing in</description>
         </property>
-        <property key="showPasswordView" type="boolean" defaultValue="false">
-            <caption>Show/mask password toggle</caption>
-            <category>Password</category>
-            <description>Adds a toggle button to show/mask password.</description>
+        <property key="showLoginFailureWarning" type="boolean" defaultValue="false">
+            <caption>Login Failure Warning</caption>
+            <category>Behavior</category>
+            <description>Alert that username will be blocked for 5 minutes if login fails 3 times</description>
         </property>
-        <property key="showButtonCaption" type="string" required="false" defaultValue="Show">
-            <caption>'Show password' button caption</caption>
-            <category>Password</category>
-            <description>The caption that is used for the show button for the value of the password.</description>
-        </property>
-        <property key="hideButtonCaption" type="string" required="false" defaultValue="Mask">
-            <caption>'Mask password' button caption</caption>
-            <category>Password</category>
-            <description>The caption that is used for the hide button for the value of the password.</description>
-        </property>
-        <property key="showImage" type="image" required="false">
-            <caption>'Show password' button image</caption>
-            <category>Password</category>
-            <description>Optional image to be displayed in 'Show password' button.</description>
-        </property>
-        <property key="hideImage" type="image" required="false">
-            <caption>'Mask password' button image</caption>
-            <category>Password</category>
-            <description>Optional image to be displayed in 'Mask password' button.</description>
+        <property key="loginFailureText" type="string" defaultValue="Your account will be blocked for 5 minutes if login with the same username fails thrice!">
+            <caption>Login Failure Text</caption>
+            <category>Behavior</category>
+            <description>Warning message to show when login fails twice</description>
         </property>
         <property key="forgotmf" type="microflow" required="false">
-            <caption>Forgot password microflow</caption>
+            <caption>Forgot Password Microflow</caption>
             <category>Behavior</category>
-            <description>Microflow being triggered in case of 'forgot password' onclick</description>
+            <description>Triggered on clicking the Forgot Password link</description>
             <returnType type="Void"/>
         </property>
         <property key="dofocus" type="boolean" defaultValue="false">
-            <caption>Focus username input field</caption>
+            <caption>Focus Username Input Field</caption>
             <category>Behavior</category>
-            <description>Focus the username field when the form is showed (only use this if it is not done automatically)</description>
+            <description>When form is shown, username filed takes focus (If not automatic)</description>
+        </property>
+        <property key="showPasswordView" type="boolean" defaultValue="false">
+            <caption>Show/Mask Password Toggle</caption>
+            <category>Password</category>
+            <description>Toggle button to show/mask password.</description>
+        </property>
+        <property key="showButtonCaption" type="string" required="false" defaultValue="Show">
+            <caption>Show Password Button Caption</caption>
+            <category>Password</category>
+            <description>Caption for the button that shows the password</description>
+        </property>
+        <property key="hideButtonCaption" type="string" required="false" defaultValue="Mask">
+            <caption>Mask Password Button Caption</caption>
+            <category>Password</category>
+            <description>Caption for the button that masks the password</description>
+        </property>
+        <property key="showImage" type="image" required="false">
+            <caption>Show Password Button Image</caption>
+            <category>Password</category>
+            <description>Optional image to be displayed on Show Password button.</description>
+        </property>
+        <property key="hideImage" type="image" required="false">
+            <caption>Mask Password Button Image</caption>
+            <category>Password</category>
+            <description>Optional image to be displayed on Mask Password button.</description>
         </property>
         <property key="convertCase" type="enumeration" defaultValue="none">
             <caption>Convert to lowercase/uppercase</caption>
             <category>Casehandling</category>
-            <description>Enables/disables automatic conversion of username input field to lowercase/uppercase</description>
+            <description>Automatic conversion of Username to lowercase/uppercase</description>
             <enumerationValues>
                 <enumerationValue key="none">None</enumerationValue>
                 <enumerationValue key="toLowerCase">Convert to lowercase</enumerationValue>
@@ -98,14 +121,25 @@
             </enumerationValues>
         </property>
         <property key="autoCorrect" type="boolean" defaultValue="false">
-            <caption>Auto correct</caption>
+            <caption>Auto-correct</caption>
             <category>Mobile</category>
-            <description>Enables/disables auto correct functionality on username input field for mobile devices</description>
+            <description>Auto-correct Username</description>
         </property>
         <property key="autoCapitalize" type="boolean" defaultValue="false">
-            <caption>Auto capitalize</caption>
+            <caption>Auto-capitalize</caption>
             <category>Mobile</category>
-            <description>Enables/disables auto capitalize functionality on username input field for mobile devices</description>
+            <description>Auto-capitalize Username</description>
+        </property>
+        <property key="keyboardType" type="enumeration" defaultValue="text">
+            <caption>Username Keyboard Type</caption>
+            <category>Mobile</category>
+            <description>The keyboard type to display when the user is entering their username</description>
+            <enumerationValues>
+                <enumerationValue key="text">Text</enumerationValue>
+                <enumerationValue key="email">Email</enumerationValue>
+                <enumerationValue key="tel">Telephone Number</enumerationValue>
+                <enumerationValue key="number">Number</enumerationValue>
+            </enumerationValues>
         </property>
     </properties>
 </widget>
