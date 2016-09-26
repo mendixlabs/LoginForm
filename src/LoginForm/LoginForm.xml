@@ -85,6 +85,11 @@
             <category>Behavior</category>
             <description>When form is shown, username filed takes focus (If not automatic)</description>
         </property>
+        <property key="clearPw" type="boolean" defaultValue="false">
+            <caption>Clear password</caption>
+            <category>Behavior</category>
+            <description>When the login fails, clear the password field</description>
+        </property>
         <property key="showPasswordView" type="boolean" defaultValue="false">
             <caption>Show/Mask Password Toggle</caption>
             <category>Password</category>
