@@ -69,6 +69,7 @@ define([
          */
         showprogress: false,
         clearPw: false,
+        clearUn: false,
         forgotmf: "",
         dofocus: false,
         showLoginFailureWarning: false,
@@ -221,6 +222,9 @@ define([
             domClass.remove(this.alertMessageNode, "hidden");
             if (this.clearPw) {
                 domAttr.set(this.passwordInputNode, "value", "");
+            }
+            if (this.clearUn) {
+                domAttr.set(this.usernameInputNode, "value", "");
             }
         },
         /**

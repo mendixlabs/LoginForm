@@ -90,6 +90,11 @@
             <category>Behavior</category>
             <description>When the login fails, clear the password field</description>
         </property>
+        <property key="clearUn" type="boolean" defaultValue="false">
+            <caption>Clear username</caption>
+            <category>Behavior</category>
+            <description>When the login fails, clear the username field</description>
+        </property>
         <property key="showPasswordView" type="boolean" defaultValue="false">
             <caption>Show/Mask Password Toggle</caption>
             <category>Password</category>
