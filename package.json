@@ -25,7 +25,7 @@
   "generatorVersion": "2.0.1",
   "paths": {
     "testProjectFolder": "./test/",
-    "testProjectFileName": "Test.mpr"
+    "testProjectFileName": "LoginForm Test.mpr"
   },
   "scripts": {
     "build": "node ./node_modules/gulp/bin/gulp build",
