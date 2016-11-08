@@ -1,12 +1,11 @@
 {
   "name": "LoginForm",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "description": "A custom login form which can be used as an alternative to the default Mendix login page.",
   "license": "",
   "author": "",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "del": "^2.2.2",
     "gulp": "^3.9.1",

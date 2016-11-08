@@ -369,7 +369,9 @@ define([
         _focusNode : function () {
             logger.debug(this.id + "._focusNode");
             //Even with timeout set to 0, function code is made asynchronous
-            setTimeout(dojoLang.hitch(this, this.usernameInputNode.focus()), 0);
+            setTimeout(dojoLang.hitch(this, function () {
+                this.usernameInputNode.focus();
+            }), 100);
         },
         /**
          * Detects if widget is running on mobile device and sets the available options e.g Keyboard Type
