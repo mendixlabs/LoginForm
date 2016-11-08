@@ -1,5 +1,5 @@
 /*jslint browser: true, devel:true, nomen:true, unparam:true, plusplus: true, regexp: true*/
-/*global logger, mendix, define, mx, dojo*/
+/*global logger, mendix, define, mx, dojo, require*/
 /**
  LoginForm
  ========================
@@ -33,7 +33,7 @@ define([
              template, templateWithoutShowPassword) {
     "use strict";
     // Declare widget.
-    return declare ("LoginForm.widget.LoginForm", [ _WidgetBase, _TemplatedMixin ], {
+    return declare("LoginForm.widget.LoginForm", [ _WidgetBase, _TemplatedMixin ], {
 
         // Template path, set in the postMixInProperties function
         templateString: "",
@@ -68,6 +68,8 @@ define([
          * Behaviour
          */
         showprogress: false,
+        clearPw: false,
+        clearUn: false,
         forgotmf: "",
         dofocus: false,
         showLoginFailureWarning: false,
@@ -218,6 +220,12 @@ define([
 
             dojoHtml.set(this.alertMessageNode, message);
             domClass.remove(this.alertMessageNode, "hidden");
+            if (this.clearPw) {
+                domAttr.set(this.passwordInputNode, "value", "");
+            }
+            if (this.clearUn) {
+                domAttr.set(this.usernameInputNode, "value", "");
+            }
         },
         /**
          * Retrieves the matching value from the internationalization object
@@ -268,8 +276,8 @@ define([
                 this.togglePasswordVisibility();
             }
 
-            var username = this._changeCase(this.usernameInputNode.value);
-            var password = this.passwordInputNode.value;
+            var username = this._changeCase(this.usernameInputNode.value),
+                password = this.passwordInputNode.value;
 
             if (username && password) {
                 if (this.showprogress) {
@@ -349,7 +357,7 @@ define([
             if (this.convertCase === "toUpperCase") {
                 return username.toUpperCase();
             }
-            if  (this.convertCase === "toLowerCase") {
+            if (this.convertCase === "toLowerCase") {
                 return username.toLowerCase();
             }
             return username;
