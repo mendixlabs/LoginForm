@@ -74,6 +74,7 @@ define([
         dofocus: false,
         showLoginFailureWarning: false,
         loginFailureText: "Your account will be blocked for 5 minutes if login with the same username fails thrice!",
+		autoComplete: false,
         /**
          * Password
          */
@@ -177,6 +178,10 @@ define([
             }
             if (this.autoCapitalize && this.convertCase !== "none") {
                 domAttr.set(this.usernameInputNode, "autocapitalize", "on");
+            }
+            if (this.autoComplete) {
+                domAttr.set(this.usernameInputNode, "autocomplete", "on");
+                domAttr.set(this.passwordInputNode, "autocomplete", "on");
             }
 
             if (this.convertCase === "toLowerCase") {
