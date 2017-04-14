@@ -34,6 +34,7 @@ For more information on contributing to this repository visit [Contributing to a
 * *Forgot password microflow* - Microflow being triggered in case of 'forgot password' onclick
 * *Focus username input field* - Move focus to username field when the form is showed (only use this if it is not done automatically)
 * *Login Failure Text* - Warning message to show when login fails twice
+* *Auto complete* - Enables/disables autocomplete functionality on username and password input field
 
 ### Mobile
 * *Auto capitalize* - Enables/disables auto capitalize functionality on username input field for mobile devices
