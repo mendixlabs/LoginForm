@@ -1,4 +1,4 @@
-#LoginForm
+# LoginForm
 A custom login form which can be used as an alternative to the default Mendix login page.
 
 ## Contributing
@@ -9,14 +9,14 @@ For more information on contributing to this repository visit [Contributing to a
 
 - Use this widget to enable **local users** to login from any page in your Mendix application
 - A link to open a 'Forgot my password' page
- 
+
 ## Limitations
 - Input credentials are authenticated with user credentials available in System.User entity(local accounts). Logging in with Mendix SSO account credentials, using this widget, will not result in being logged in.
 - In a Sandbox environment an application owner is not able to configure the MxAdmin account(=local). To log in with a MxAdmin account is not possible in a Sandbox.
 
-## Configuration 
+## Configuration
 - Insert the widget in a page
-- Configure the properties 
+- Configure the properties
 
 ## Properties
 
@@ -54,7 +54,3 @@ NOTE: MxAdmin administrative user will be accessible in both cases as well.
 
 ## Known issues
 - Mendix runtime returns no feedback about the existence of a username. This is by design.
-
-
-
- 
